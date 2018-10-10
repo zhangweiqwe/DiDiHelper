@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">zr</string>
+    <string name="description">这是红包助手</string>
+    <string name="no_suspension_windows_permission">没有悬浮窗权限</string>
+
+
+    <array name="arr">
+        <item>sfasdf</item>
+        <item>sfasdf</item>
+        <item>sfasdf</item>
+        <item>sfasdf</item>
+        <item>sfasdf</item>
+    </array>
+</resources>
