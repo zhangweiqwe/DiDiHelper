@@ -28,17 +28,16 @@ public class SuspensionWindow implements View.OnTouchListener {
     private int width, height;
 
     public SuspensionWindow(final Context context) {
-        width = height = DensityUtils.dp2px(context, 58);
+        width = height = DensityUtils.dp2px(context, 48);
 
         Log.d(TAG, "SuspensionWindow(Context context)");
 
         ImageView imageView = new ImageView(context);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setBackgroundResource(R.mipmap.ic_launcher);
+        imageView.setBackgroundResource(R.mipmap.ic_launcher_round);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context,MainActivity.class));
+                context.startActivity(new Intent(context, MainActivity.class));
             }
         });
         view = imageView;
@@ -82,8 +81,8 @@ public class SuspensionWindow implements View.OnTouchListener {
             case MotionEvent.ACTION_MOVE:
                 rawX = motionEvent.getRawX();
                 rawY = motionEvent.getRawY();
-                layoutParams.x = (int) (rawX-x);
-                layoutParams.y = (int) (rawY-y);
+                layoutParams.x = (int) (rawX - x);
+                layoutParams.y = (int) (rawY - y);
                 windowManager.updateViewLayout(view, layoutParams);
                 break;
             case MotionEvent.ACTION_UP:
@@ -98,7 +97,7 @@ public class SuspensionWindow implements View.OnTouchListener {
         if (view.getParent() == null) {
             Context context = view.getContext();
             layoutParams.x = context.getResources().getDisplayMetrics().widthPixels;
-            layoutParams.y = DensityUtils.dp2px(context,122);
+            layoutParams.y = DensityUtils.dp2px(context, 122);
             windowManager.addView(view, layoutParams);
         }
     }

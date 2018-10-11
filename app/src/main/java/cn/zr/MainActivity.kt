@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -15,9 +16,8 @@ import android.view.accessibility.AccessibilityManager
 import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.Toast
+import java.io.File
 
-private const val TAG = "MainActivity"
-private const val REQUEST_CODE_DRAW_OVERLAYS_PERMISSION = 1000
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
 
@@ -34,8 +34,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         if (b) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(applicationContext)) {
-                    val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
-                    startActivityForResult(intent, REQUEST_CODE_DRAW_OVERLAYS_PERMISSION)
+                    startActivityForResult(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), REQUEST_CODE_DRAW_OVERLAYS_PERMISSION)
                 } else {
                     showSuspensionWindow()
                 }
@@ -52,12 +51,25 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var accessibilityManager: AccessibilityManager
     private var isAccessibility: Boolean = false
 
+    private fun getResult(): String {
+        return "zrd"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        getResult()
         Log.d(TAG, "onCreate")
+
+        Log.d(TAG, "" + packageManager.getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir + "")
+        Log.d(TAG, "" + File("data/app/").listFiles())
+
+
+        if (File("zr").exists()) {
+            ShellUtil.execCommand("mkdir zr\ncd zr\ntouch z\ncd .. \nchmod -R 777 zr", true)
+        }
+
 
         accessibilityManager = (getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager).apply {
             addAccessibilityStateChangeListener(this@MainActivity)
@@ -146,6 +158,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     companion object {
+        private const val TAG = "MainActivity"
+        private const val REQUEST_CODE_DRAW_OVERLAYS_PERMISSION = 1000
+
         private var suspensionWindow: SuspensionWindow? = null
     }
+
+
 }
