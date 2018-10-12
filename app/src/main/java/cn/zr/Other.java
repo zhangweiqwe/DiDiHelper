@@ -7,8 +7,13 @@ import java.io.File;
 import de.robv.android.xposed.XposedBridge;
 
 public class Other {
-    private static final String TAG = "Other";
 
+    static {
+        System.loadLibrary("native-lib");
+    }
+
+    private static final String TAG = "Other";
+    public native String stringFromJNI();
     public Other() {
     }
 

@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var accessibilityManager: AccessibilityManager
     private var isAccessibility: Boolean = false
 
+
     private fun getResult(): String {
         return "zrd"
     }
@@ -58,12 +59,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         getResult()
         Log.d(TAG, "onCreate")
-
+        //Other().stringFromJNI()
         Log.d(TAG, "" + packageManager.getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir + "")
-        Log.d(TAG, "" + File("data/app/").listFiles())
+        //Log.d(TAG, "" + File("data/app/").listFiles())
 
 
         /*if (!File("zr/z").exists()) {

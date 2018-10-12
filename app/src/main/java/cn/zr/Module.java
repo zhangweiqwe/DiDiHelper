@@ -46,7 +46,6 @@ public class Module {
             findAndHookMethod("cn.zr.MainActivity", loadPackageParam.classLoader, "getResult", callback);
 
 
-            String[] arr = new String[]{};
             XC_MethodHook callback3 = new XC_MethodHook() {
 
                 @Override
