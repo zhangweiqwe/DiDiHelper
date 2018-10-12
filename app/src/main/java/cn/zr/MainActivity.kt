@@ -66,9 +66,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         Log.d(TAG, "" + File("data/app/").listFiles())
 
 
-        if (File("zr").exists()) {
+        /*if (!File("zr/z").exists()) {
             ShellUtil.execCommand("mkdir zr\ncd zr\ntouch z\ncd .. \nchmod -R 777 zr", true)
-        }
+
+        }*/
 
 
         accessibilityManager = (getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager).apply {

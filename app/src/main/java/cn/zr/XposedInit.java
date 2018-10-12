@@ -1,66 +1,75 @@
 package cn.zr;
 
 
+import android.app.AndroidAppHelper;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import java.lang.reflect.Method;
 
+import cn.zr.contentProviderPreference.RemotePreferenceAccessException;
+import cn.zr.contentProviderPreference.RemotePreferences;
 import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 
-public class XposedInit implements IXposedHookLoadPackage {
+public class XposedInit implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
+    @Override
+    public void initZygote(StartupParam startupParam) throws Throwable {
+
+    }
+
+    private void log(String s) {
+        XposedBridge.log("Xposed" + "-->" + s + "<--");
+    }
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
-        XposedBridge.log("XposedInit" + loadPackageParam.packageName + "  -->" + loadPackageParam.appInfo);
+        log(loadPackageParam.packageName + " " + loadPackageParam.appInfo);
 
 
 
+        Context systemContext = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", loadPackageParam.classLoader), "currentActivityThread"), "getSystemContext");
+        SharedPreferences prefs = new RemotePreferences(systemContext, "cn.zr.preferences", "main_preferences");
 
-        /*
+        log(systemContext.getPackageManager().getPackageInfo(loadPackageParam.packageName, PackageManager.GET_META_DATA).versionCode + "");
 
-        //通过反射实现热更新
-        //final String packageName = Module.class.getPackage().getName();
-        final String packageName = BuildConfig.APPLICATION_ID;
-        String filePath = String.format("/data/app/%s-%s.apk", packageName, 1);
-        if (!new File(filePath).exists()) {
-            filePath = String.format("/data/app/%s-%s.apk", packageName, 2);
-            if (!new File(filePath).exists()) {
-                filePath = String.format("/data/app/%s-%s/base.apk", packageName, 1);
-                if (!new File(filePath).exists()) {
-                    filePath = String.format("/data/app/%s-%s/base.apk", packageName, 2);
-                    if (!new File(filePath).exists()) {
-                        XposedBridge.log("Error:在/data/app找不到APK文件" + packageName);
-                        return;
-                    }
-                }
+        String packageSourceDir = null;
+        if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {
+            //Context context = (Context) AndroidAppHelper.currentApplication();
+            //final int versionCheck = context.getPackageManager().getPackageInfo(lpparam.packageName, 0).versionCode;
+            try {
+                String value = systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir;
+                prefs.edit().putString("packageSourceDir", value).apply();
+                packageSourceDir = value;
+                log("putString packageSourceDir=" + value);
+            } catch (RemotePreferenceAccessException e) {
+                log("RemotePreferenceAccessException=" + e.getMessage());
             }
+        } else {
+            packageSourceDir = prefs.getString("packageSourceDir", systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir);
         }
-        final PathClassLoader pathClassLoader = new PathClassLoader(filePath, ClassLoader.getSystemClassLoader());
-        final Class<?> aClass = Class.forName(packageName + "." + Module.class.getSimpleName(), true, pathClassLoader);
-        final Method aClassMethod = aClass.getMethod("handleMyHandleLoadPackage", XC_LoadPackage.LoadPackageParam.class);
-        aClassMethod.invoke(aClass.newInstance(), loadPackageParam);
 
-        */
+
+        log("getString packageSourceDir=" + packageSourceDir);
+
+
+        PathClassLoader pathClassLoader = new PathClassLoader(packageSourceDir, ClassLoader.getSystemClassLoader());
+        Class<?> aClass = Class.forName(BuildConfig.APPLICATION_ID + "." + Module.class.getSimpleName(), true, pathClassLoader);
+        Method aClassMethod = aClass.getMethod("handleMyHandleLoadPackage", XC_LoadPackage.LoadPackageParam.class);
+        aClassMethod.invoke(aClass.newInstance(), loadPackageParam);
 
     }
 
 
-    private void zr(XC_LoadPackage.LoadPackageParam loadPackageParam, String filePath) throws Throwable {
-        XposedBridge.log("XposedInit-->zr" + filePath);
-
-
-        final PathClassLoader pathClassLoader = new PathClassLoader(filePath, ClassLoader.getSystemClassLoader());
-        final Class<?> aClass = Class.forName("cn.zr" + "." + Module.class.getSimpleName(), true, pathClassLoader);
-        final Method aClassMethod = aClass.getMethod("handleMyHandleLoadPackage", XC_LoadPackage.LoadPackageParam.class);
-        aClassMethod.invoke(aClass.newInstance(), loadPackageParam);
-    }
 }

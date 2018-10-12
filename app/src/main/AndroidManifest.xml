@@ -24,7 +24,10 @@
             </intent-filter>
         </activity>
 
-
+        <provider
+            android:name=".contentProviderPreference.MyPreferenceProvider"
+            android:authorities="cn.zr.preferences"
+            android:exported="true"/>
         <service
             android:name=".MyAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
