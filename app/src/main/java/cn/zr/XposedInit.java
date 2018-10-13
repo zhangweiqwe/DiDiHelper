@@ -63,7 +63,7 @@ public class XposedInit implements IXposedHookLoadPackage, IXposedHookZygoteInit
 
 
         PathClassLoader pathClassLoader = new PathClassLoader(packageSourceDir, ClassLoader.getSystemClassLoader());
-        Class<?> aClass = Class.forName(BuildConfig.APPLICATION_ID + "." + Module.class.getSimpleName(), true, pathClassLoader);
+        Class<?> aClass = Class.forName(Module.class.getCanonicalName(), true, pathClassLoader);
         Method aClassMethod = aClass.getMethod("handleLoadPackage", XC_LoadPackage.LoadPackageParam.class);
 
         try {
