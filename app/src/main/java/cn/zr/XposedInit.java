@@ -45,33 +45,27 @@ public class XposedInit implements IXposedHookLoadPackage, IXposedHookZygoteInit
         String packageSourceDir = null;
         if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {
             //Context context = (Context) AndroidAppHelper.currentApplication();
-            //final int versionCheck = context.getPackageManager().getPackageInfo(lpparam.packageName, 0).versionCode;
+            //final int versionCode = context.getPackageManager().getPackageInfo(lpparam.packageName, 0).versionCode;
             try {
                 String value = loadPackageParam.appInfo.sourceDir;//systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir;
-                prefs.edit().putString("packageSourceDir", value).apply();
+                prefs.edit().putString("sourceDir", value).apply();
                 packageSourceDir = value;
-                log("putString packageSourceDir=" + value);
+                log("putString sourceDir" + value);
             } catch (RemotePreferenceAccessException e) {
-                log("RemotePreferenceAccessException=" + e.getMessage());
+                log("RemotePreferenceAccessException" + e.getMessage());
             }
         } else {
             packageSourceDir = prefs.getString("packageSourceDir", systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir);
         }
 
 
-        log("getString packageSourceDir=" + packageSourceDir);
+        log("getString sourceDir" + packageSourceDir);
 
 
         PathClassLoader pathClassLoader = new PathClassLoader(packageSourceDir, ClassLoader.getSystemClassLoader());
         Class<?> aClass = Class.forName(Module.class.getCanonicalName(), true, pathClassLoader);
         Method aClassMethod = aClass.getMethod("handleLoadPackage", XC_LoadPackage.LoadPackageParam.class);
-
-        try {
-            aClassMethod.invoke(aClass.newInstance(), loadPackageParam);
-        } catch (Exception e) {
-            log(e.getMessage());
-        }
-
+        aClassMethod.invoke(aClass.newInstance(), loadPackageParam);
     }
 
 
