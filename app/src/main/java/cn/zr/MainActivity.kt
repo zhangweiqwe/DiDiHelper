@@ -16,18 +16,34 @@ import android.view.accessibility.AccessibilityManager
 import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.Toast
+import cn.zr.contentProviderPreference.RemotePreferences
 import java.io.File
 
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
 
+    private lateinit var remotePreferences: RemotePreferences
+    private fun initPreferences() {
+        remotePreferences = RemotePreferences(this@MainActivity, "cn.zr.preferences", "other_preferences")
+        PreferenceManager.getDefaultSharedPreferences(this).apply {
+            registerOnSharedPreferenceChangeListener(this@MainActivity)
+        }.edit().apply {
+            "switch_preference".also {
+                putBoolean(it, remotePreferences.getBoolean(it, false))
+            }
+        }.apply()
+    }
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-        when (key) {
-            "switch_preference" -> {
-                switchSuspensionWindow(sharedPreferences.getBoolean(key, false))
+        remotePreferences.edit().also {
+            when (key) {
+                "switch_preference" -> {
+                    switchSuspensionWindow(sharedPreferences.getBoolean(key, false))
+                    it.putBoolean(key, sharedPreferences.getBoolean(key, false))
+                }
             }
 
-        }
+        }.apply()
     }
 
     private fun switchSuspensionWindow(b: Boolean) {
@@ -56,14 +72,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         return "zrd"
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         getResult()
         Log.d(TAG, "onCreate")
         //Other().stringFromJNI()
-        Log.d(TAG, "" + packageManager.getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir + "")
-        //Log.d(TAG, "" + File("data/app/").listFiles())
+
 
 
         /*if (!File("zr/z").exists()) {
@@ -88,11 +104,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
 
+        initPreferences()
+        switchSuspensionWindow(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("switch_preference", false))
 
-        PreferenceManager.getDefaultSharedPreferences(this).apply {
-            switchSuspensionWindow(getBoolean("switch_preference", false))
-            registerOnSharedPreferenceChangeListener(this@MainActivity)
-        }
     }
 
 

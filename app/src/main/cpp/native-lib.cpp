@@ -7,7 +7,7 @@
 #include <sys/wait.h>
 
 #define LOG_TAG "native-lib"
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#define LOG_D(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_cn_zr_Other_stringFromJNI(
@@ -26,7 +26,7 @@ Java_cn_zr_Other_stringFromJNI(
         /*if (data == 0x17 || data == 0xce) {
             printf("data = %x , addr = %x\n", data, addr);
         }*/
-        LOGD("data = %x , addr = %x\n", data, addr);
+        LOG_D("data = %x , addr = %x\n", data, addr);
     }
 
     ptrace(PTRACE_DETACH, pid, NULL, NULL);

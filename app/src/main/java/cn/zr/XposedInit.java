@@ -35,21 +35,19 @@ public class XposedInit implements IXposedHookLoadPackage, IXposedHookZygoteInit
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
-        log(loadPackageParam.packageName + " " + loadPackageParam.appInfo);
-
+        log(loadPackageParam.packageName + " " + loadPackageParam.appInfo + " " + loadPackageParam.appInfo.sourceDir);
 
 
         Context systemContext = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", loadPackageParam.classLoader), "currentActivityThread"), "getSystemContext");
-        SharedPreferences prefs = new RemotePreferences(systemContext, "cn.zr.preferences", "main_preferences");
+        SharedPreferences prefs = new RemotePreferences(systemContext, "cn.zr.preferences", "other_preferences");
 
-        log(systemContext.getPackageManager().getPackageInfo(loadPackageParam.packageName, PackageManager.GET_META_DATA).versionCode + "");
 
         String packageSourceDir = null;
         if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {
             //Context context = (Context) AndroidAppHelper.currentApplication();
             //final int versionCheck = context.getPackageManager().getPackageInfo(lpparam.packageName, 0).versionCode;
             try {
-                String value = systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir;
+                String value = loadPackageParam.appInfo.sourceDir;//systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir;
                 prefs.edit().putString("packageSourceDir", value).apply();
                 packageSourceDir = value;
                 log("putString packageSourceDir=" + value);
@@ -66,8 +64,13 @@ public class XposedInit implements IXposedHookLoadPackage, IXposedHookZygoteInit
 
         PathClassLoader pathClassLoader = new PathClassLoader(packageSourceDir, ClassLoader.getSystemClassLoader());
         Class<?> aClass = Class.forName(BuildConfig.APPLICATION_ID + "." + Module.class.getSimpleName(), true, pathClassLoader);
-        Method aClassMethod = aClass.getMethod("handleMyHandleLoadPackage", XC_LoadPackage.LoadPackageParam.class);
-        aClassMethod.invoke(aClass.newInstance(), loadPackageParam);
+        Method aClassMethod = aClass.getMethod("handleLoadPackage", XC_LoadPackage.LoadPackageParam.class);
+
+        try {
+            aClassMethod.invoke(aClass.newInstance(), loadPackageParam);
+        } catch (Exception e) {
+            log(e.getMessage());
+        }
 
     }
 

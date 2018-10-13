@@ -31,20 +31,24 @@ public class Module {
      *
      * @param loadPackageParam
      */
-    public void handleMyHandleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam)  {
+    public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam)  throws Throwable{
 
         if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {
+            new PackageHooker(loadPackageParam).hook();
+        }
+
+        if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {
+
             XC_MethodHook callback = new XC_MethodHook() {
 
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     super.afterHookedMethod(param);
-                    param.setResult("已启动，不需要重启手机ldsa");
-                    Toast.makeText((Context) param.thisObject, "你在看什么xposeddemo", Toast.LENGTH_SHORT).show();
+                    param.setResult("zr");
+                    Toast.makeText((Context) param.thisObject, "demo", Toast.LENGTH_SHORT).show();
                 }
             };
             findAndHookMethod("cn.zr.MainActivity", loadPackageParam.classLoader, "getResult", callback);
-
 
             XC_MethodHook callback3 = new XC_MethodHook() {
 

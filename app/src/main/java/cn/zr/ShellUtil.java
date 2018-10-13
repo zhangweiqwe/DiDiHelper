@@ -86,14 +86,11 @@ public class ShellUtil {
                 String s;
 
 
-                Log.d(TAG, "->1" + process.exitValue());
+                Log.d(TAG, "process.exitValue()" + process.exitValue());
 
                 if (process.exitValue() == 0) {
                     successMsg = new ArrayList<String>();
                     successResult = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-
-                    Log.d(TAG, "->2");
 
                     while ((s = successResult.readLine()) != null) {
                         Log.d(TAG, "successResult.readLine()-->" + s + "<");
@@ -110,12 +107,12 @@ public class ShellUtil {
                     }*/
 
                     s = errorResult.readLine();
-                    Log.d(TAG, "errorResult.readLine()-->" + s + "<");
                     errorMsg.add(s);
+                    Log.d(TAG, "errorResult.readLine()-->" + s + "<");
 
                 }
 
-                Log.d(TAG, "->3");
+                Log.d(TAG, "->end");
 
             }
         } catch (IOException e) {
