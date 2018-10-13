@@ -20,7 +20,7 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
  * Created by lanxiaobin on 2018/1/29.
  */
 
-public class Module {
+public class Module extends XposedInit {
 
     private void log(String s) {
         XposedBridge.log("Module" + "-->" + s + "<--");
@@ -31,7 +31,8 @@ public class Module {
      *
      * @param loadPackageParam
      */
-    public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam loadPackageParam)  throws Throwable{
+    @Override
+    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
 
         if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {
             new PackageHooker(loadPackageParam).hook();
@@ -57,8 +58,8 @@ public class Module {
                     super.beforeHookedMethod(param);
                     log("afterHookedMethod");
 
-                    if(param.args!=null&&param.args.length>0&&param.args[0] instanceof String){
-                        log("->>"+(String) param.args[0]);
+                    if (param.args != null && param.args.length > 0 && param.args[0] instanceof String) {
+                        log("->>" + (String) param.args[0]);
                     }
                 }
 
