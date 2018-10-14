@@ -18,6 +18,7 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 
 /**
  * Created by lanxiaobin on 2018/1/29.
+ * https://api.xposed.info/reference/android/app/AndroidAppHelper.html
  */
 
 public class Module extends XposedInit {

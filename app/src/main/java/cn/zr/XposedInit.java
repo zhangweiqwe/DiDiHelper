@@ -41,24 +41,13 @@ public class XposedInit implements IXposedHookLoadPackage, IXposedHookZygoteInit
         Context systemContext = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", loadPackageParam.classLoader), "currentActivityThread"), "getSystemContext");
         SharedPreferences prefs = new RemotePreferences(systemContext, "cn.zr.preferences", "other_preferences");
 
-
-        String packageSourceDir = null;
+        log(loadPackageParam.packageName + " " + systemContext.getPackageManager().getPackageInfo(loadPackageParam.packageName, PackageManager.GET_ACTIVITIES).versionCode + "");
+        String packageSourceDir;
         if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {
-            //Context context = (Context) AndroidAppHelper.currentApplication();
-            //final int versionCode = context.getPackageManager().getPackageInfo(lpparam.packageName, 0).versionCode;
-            try {
-                String value = loadPackageParam.appInfo.sourceDir;//systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir;
-                prefs.edit().putString("sourceDir", value).apply();
-                packageSourceDir = value;
-                log("putString sourceDir" + value);
-            } catch (RemotePreferenceAccessException e) {
-                log("RemotePreferenceAccessException" + e.getMessage());
-            }
+            prefs.edit().putString("sourceDir", packageSourceDir = loadPackageParam.appInfo.sourceDir).apply();
         } else {
             packageSourceDir = prefs.getString("packageSourceDir", systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir);
         }
-
-
         log("getString sourceDir" + packageSourceDir);
 
 
