@@ -28,7 +28,7 @@ public class PackageHooker {
         loadPackageParam = param;
     }
 
-    public static void assist(XC_LoadPackage.LoadPackageParam param){
+    public static void assist(XC_LoadPackage.LoadPackageParam param) {
         try {
             new PackageHooker(param).hook();
         } catch (IOException e) {

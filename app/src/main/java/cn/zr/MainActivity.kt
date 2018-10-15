@@ -82,6 +82,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
 
 
+
+        Thread(Runnable {  }).start()
         /*if (!File("zr/z").exists()) {
             ShellUtil.execCommand("mkdir zr\ncd zr\ntouch z\ncd .. \nchmod -R 777 zr", true)
 

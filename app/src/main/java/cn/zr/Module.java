@@ -23,8 +23,8 @@ import static de.robv.android.xposed.XposedHelpers.findClass;
 
 public class Module extends XposedInit {
 
-    private void log(String s) {
-        XposedBridge.log("Module" + "-->" + s + "<--");
+    private void print(String s) {
+        XposedBridge.log("Module" + "-->" + s + "<");
     }
 
     /**
@@ -57,10 +57,10 @@ public class Module extends XposedInit {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                     super.beforeHookedMethod(param);
-                    log("afterHookedMethod");
+                    print("afterHookedMethod");
 
                     if (param.args != null && param.args.length > 0 && param.args[0] instanceof String) {
-                        log("->>" + (String) param.args[0]);
+                        print("->>" + (String) param.args[0]);
                     }
                 }
 

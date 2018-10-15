@@ -21,11 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class cn.zr.XposedInit {*;}
+-keep class cn.zr.Module {*;}
 
--assumenosideeffects class cn.zr.PackageHooker{
-    private void print(...);
-}
 
--assumenosideeffects class cn.zr.Moudule{
-    private void print(...);
-}
+

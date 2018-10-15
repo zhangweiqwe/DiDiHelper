@@ -21,10 +21,18 @@ android {
     }
     buildTypes {
         release {
+            zipAlignEnabled true
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        /*debug {
+            zipAlignEnabled true
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'debug-proguard-rules.pro'
+        }*/
 
     }
     externalNativeBuild {
@@ -46,4 +54,5 @@ dependencies {
 
     compileOnly 'de.robv.android.xposed:api:82'
     //compileOnly files('libs/api-82.jar')
+
 }
