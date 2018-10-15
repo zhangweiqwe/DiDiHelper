@@ -36,7 +36,7 @@ public class Module extends XposedInit {
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
 
         if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {
-            new PackageHooker(loadPackageParam).hook();
+            PackageHooker.assist(loadPackageParam);
         }
 
         if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {

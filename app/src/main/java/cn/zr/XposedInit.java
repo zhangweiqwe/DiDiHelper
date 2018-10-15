@@ -30,12 +30,12 @@ public class XposedInit implements IXposedHookLoadPackage, IXposedHookZygoteInit
     }
 
     private void log(String s) {
-        XposedBridge.log("Xposed" + "-->" + s + "<--");
+        XposedBridge.log("XposedInit" + "-->" + s + "<--");
     }
 
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
-        log(loadPackageParam.packageName + " " + loadPackageParam.appInfo + " " + loadPackageParam.appInfo.sourceDir);
+        log(loadPackageParam.packageName + " " + loadPackageParam.appInfo + " " + loadPackageParam.appInfo.sourceDir+" "+AndroidAppHelper.currentApplication());
 
 
         Context systemContext = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", loadPackageParam.classLoader), "currentActivityThread"), "getSystemContext");
@@ -46,7 +46,7 @@ public class XposedInit implements IXposedHookLoadPackage, IXposedHookZygoteInit
         if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {
             prefs.edit().putString("sourceDir", packageSourceDir = loadPackageParam.appInfo.sourceDir).apply();
         } else {
-            packageSourceDir = prefs.getString("packageSourceDir", systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir);
+            packageSourceDir = prefs.getString("sourceDir", systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir);
         }
         log("getString sourceDir" + packageSourceDir);
 
