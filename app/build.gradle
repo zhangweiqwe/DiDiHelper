@@ -27,12 +27,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
-        /*debug {
+        debug {
             zipAlignEnabled true
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'debug-proguard-rules.pro'
-        }*/
+        }
 
     }
     externalNativeBuild {
@@ -53,6 +53,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     compileOnly 'de.robv.android.xposed:api:82'
-    //compileOnly files('libs/api-82.jar')
 
 }
