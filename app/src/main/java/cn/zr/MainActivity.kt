@@ -134,11 +134,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             isChecked = isAccessibility
             setOnCheckedChangeListener(this@MainActivity)
         }
+        isStart()
     }
 
     private fun isStart(): Boolean {
         Log.d(TAG, "isStart")
         for (i in accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)) {
+            Log.d(TAG,"-->")
+            Log.d(TAG,"-->"+i.packageNames[0])
             if (i.id == "$packageName/.MyAccessibilityService") {
                 return true
             }

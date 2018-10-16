@@ -28,7 +28,76 @@ public class MyAccessibilityService extends AccessibilityService {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                 break;
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
+                Log.d(TAG, accessibilityEvent.getClassName().toString());
+
+
                 AccessibilityNodeInfo accessibilityNodeInfo = getRootInActiveWindow();
+
+
+                if (accessibilityNodeInfo != null) {
+                    //com.sdu.didi.gsui:id/order_card_fragment_key_info_1 明天 1
+                    //com.sdu.didi.gsui:id/order_card_fragment_key_info_3 公里  2
+                    //com.sdu.didi.gsui:id/order_card_fragment_key_info_3 公里 3
+                    List<AccessibilityNodeInfo> accessibilityNodeInfoParent = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/show_order_fragment"); //aev afx
+                    if (accessibilityNodeInfoParent != null && accessibilityNodeInfoParent.size() == 1) {
+
+                        CharSequence arr[][] = new CharSequence[3][2];
+                        List<AccessibilityNodeInfo> accessibilityNodeInfo0 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/order_card_fragment_key_info_2");
+                        if (accessibilityNodeInfo0 != null && accessibilityNodeInfo0.size() == 3) {
+                            for (int i = 0; i < 3; i++) {
+                                arr[0][i] = accessibilityNodeInfo0.get(i).getText();
+                            }
+                        }
+
+                        List<AccessibilityNodeInfo> accessibilityNodeInfo1 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/order_card_fragment_key_info_1");
+                        if (accessibilityNodeInfo1 != null && accessibilityNodeInfo1.size() == 1) {
+                            arr[0][0] = accessibilityNodeInfo1.get(0).getText();
+                        }
+
+                        List<AccessibilityNodeInfo> accessibilityNodeInfo2 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/order_card_fragment_key_info_3");
+                        if (accessibilityNodeInfo2 != null && accessibilityNodeInfo2.size() == 2) {
+                            arr[0][1] = accessibilityNodeInfo2.get(1).getText();
+                            arr[0][2] = accessibilityNodeInfo2.get(2).getText();
+                        }
+
+                        CharSequence arr0[] = new CharSequence[2];
+                        List<AccessibilityNodeInfo> accessibilityNodeInfoAreaAddressStart = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/text_order_card_ordinary_area_address_start");
+                        if (accessibilityNodeInfoAreaAddressStart != null && accessibilityNodeInfoAreaAddressStart.size() == 1) {
+                            arr0[0] = accessibilityNodeInfoAreaAddressStart.get(0).getText();
+                        }
+                        List<AccessibilityNodeInfo> accessibilityNodeInfoAreaAddressEnd = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/text_order_card_ordinary_area_address_end");
+                        if (accessibilityNodeInfoAreaAddressEnd != null && accessibilityNodeInfoAreaAddressEnd.size() == 1) {
+                            arr0[1] = accessibilityNodeInfoAreaAddressEnd.get(1).getText();
+                        }
+
+
+
+                        //抢单按钮状态客抢
+                        CharSequence bottomBnArr[] = new CharSequence[2];
+                        List<AccessibilityNodeInfo> accessibilityNodeInfobottomBn0 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/grab_order_btn");
+                        if (accessibilityNodeInfobottomBn0 != null && accessibilityNodeInfobottomBn0.size() == 1) {
+                            bottomBnArr[0] = accessibilityNodeInfobottomBn0.get(0).getText();
+                        }
+                        List<AccessibilityNodeInfo> accessibilityNodeInfobottomBn1 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/grab_order_count_down");
+                        if (accessibilityNodeInfobottomBn1 != null && accessibilityNodeInfobottomBn1.size() == 1) {
+                            bottomBnArr[1] = accessibilityNodeInfobottomBn1.get(1).getText();
+                        }
+                    }
+                    /*List<AccessibilityNodeInfo> accessibilityNodeInfoCrabBn = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/broad_order_show_order_grab_btn");
+                    if (accessibilityNodeInfoCrabBn != null && accessibilityNodeInfoCrabBn.size() == 1) {
+                        accessibilityNodeInfoCrabBn.get(0).performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK);
+                    }
+
+                    List<AccessibilityNodeInfo> accessibilityNodeInfoExitBn = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/title_view_image");
+                    if (accessibilityNodeInfoExitBn != null && accessibilityNodeInfoCrabBn.size() == 1) {
+                        accessibilityNodeInfoExitBn.get(0).performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK);
+                    }*/
+                }
+
+               /* Log.d(TAG,accessibilityEvent.getClassName().toString());
+
+                AccessibilityNodeInfo accessibilityNodeInfo = getRootInActiveWindow();
+
 
                 if (accessibilityNodeInfo != null) {
                     List<AccessibilityNodeInfo> accessibilityNodeIfs = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/ki"); //aev afx
@@ -47,7 +116,7 @@ public class MyAccessibilityService extends AccessibilityService {
 
 
                 }
-
+*/
                 break;
 
         }
