@@ -35,7 +35,7 @@ public class Module extends XposedInit {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam loadPackageParam) throws Throwable {
 
-        if (loadPackageParam.packageName.equals(BuildConfig.APPLICATION_ID)) {
+        if (loadPackageParam.packageName.equals("com.sdu.didi.gsui")) {
             PackageHooker.assist(loadPackageParam);
         }
 
