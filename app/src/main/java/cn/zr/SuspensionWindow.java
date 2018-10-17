@@ -128,6 +128,8 @@ public class SuspensionWindow implements View.OnTouchListener {
                 move = false;
                 break;
             case MotionEvent.ACTION_MOVE:
+
+
                 rawX = motionEvent.getRawX();
                 rawY = motionEvent.getRawY();
                 layoutParams.x = (int) (rawX - x);
