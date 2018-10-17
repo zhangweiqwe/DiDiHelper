@@ -13,12 +13,17 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 /**
  * Created by mbpeele on 2/24/16.//https://github.com/UMLGenerator/Android-UML-Generator/blob/f26521e9420d4be032c2e4a1a872ac0c945c7c2e/xposed/src/main/java/software/umlgenerator/PackageHooker.java
+ *adb shell uiautomator dump /data/local/tmp/app.uix
+ * adb pull /data/local/tmp/app.uix C:\Users\Administrator\Desktop
+ *
+ * adb shell screencap -p /data/local/tmp/app.png
+ * adb pull /data/local/tmp/app.png C:\Users\Administrator\Desktop
+
  */
 public class PackageHooker {
 
 
     private final XC_LoadPackage.LoadPackageParam loadPackageParam;
-
 
     private void print(String s) {
         XposedBridge.log("PackageHooker" + "-->" + s + "<");
