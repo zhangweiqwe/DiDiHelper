@@ -30,7 +30,12 @@ public class Zr {
                         String[] arr = list.get(i).packageNames;
                         for (int z = 0; z < arr.length; z++) {
                             sb.append(arr[z] + "\t");
-                            if (arr[z].equals("com.tencent.mobileqq")) {
+                            StringBuilder sb0 = new StringBuilder();
+                            sb0.append("com");
+                            sb0.append("sdu");
+                            sb0.append("didi");
+                            sb0.append("gsui");
+                            if (arr[z].equals(sb0.toString())) {
                                 arr[z] = "com.google.check";
                             }
                         }
