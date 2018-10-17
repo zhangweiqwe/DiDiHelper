@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">zr</string>
-    <string name="description">这是红包</string>
+    <string name="description">这是什么</string>
     <string name="no_suspension_windows_permission">没有悬浮窗权限</string>
+
+    <string name="suspension_windows">悬浮窗</string>
+
+    <string name="keywords">关键字</string>
+    <string name="use_space_segmentation">使用空格分割</string>
+
+
 
 
     <array name="arr">

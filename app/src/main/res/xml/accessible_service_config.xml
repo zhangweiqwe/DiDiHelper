@@ -6,7 +6,7 @@
     android:canRetrieveWindowContent="true"
     android:description="@string/description"
     android:notificationTimeout="10"
-    android:packageNames="com.tencent.mm"
+    android:packageNames="com.tencent.mobileqq"
     android:settingsActivity="cn.zr.MainActivity" />
 
 

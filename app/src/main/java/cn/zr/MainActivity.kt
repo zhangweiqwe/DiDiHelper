@@ -12,12 +12,14 @@ import android.os.Bundle
 import android.provider.Settings
 import android.support.v7.preference.PreferenceManager
 import android.util.Log
+import android.view.KeyEvent
 import android.view.accessibility.AccessibilityManager
 import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.Toast
 import cn.zr.contentProviderPreference.RemotePreferences
 import java.io.File
+import java.lang.reflect.Modifier
 
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
@@ -26,24 +28,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private fun initPreferences() {
         remotePreferences = RemotePreferences(this@MainActivity, "cn.zr.preferences", "other_preferences")
         PreferenceManager.getDefaultSharedPreferences(this).apply {
+            switchSuspensionWindow(getBoolean("suspension_window_check_box", false))
             registerOnSharedPreferenceChangeListener(this@MainActivity)
-        }.edit().apply {
-            "switch_preference".also {
-                putBoolean(it, remotePreferences.getBoolean(it, false))
-            }
-        }.apply()
+        }
+
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-        remotePreferences.edit().also {
-            when (key) {
-                "switch_preference" -> {
-                    switchSuspensionWindow(sharedPreferences.getBoolean(key, false))
-                    it.putBoolean(key, sharedPreferences.getBoolean(key, false))
-                }
-            }
 
-        }.apply()
+        when (key) {
+            "suspension_window_check_box" -> {
+                switchSuspensionWindow(sharedPreferences.getBoolean(key, false))
+            }
+        }
+
     }
 
     private fun switchSuspensionWindow(b: Boolean) {
@@ -52,13 +50,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 if (!Settings.canDrawOverlays(applicationContext)) {
                     startActivityForResult(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), REQUEST_CODE_DRAW_OVERLAYS_PERMISSION)
                 } else {
-                    showSuspensionWindow()
+                    SuspensionWindow.showSuspensionWindow(this)
                 }
             } else {
-                showSuspensionWindow()
+                SuspensionWindow.showSuspensionWindow(this)
             }
         } else {
-            dismissSuspensionWindow()
+            SuspensionWindow.dismissSuspensionWindow()
         }
     }
 
@@ -81,9 +79,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         //Other().stringFromJNI()
 
 
-
-
-        Thread(Runnable {  }).start()
         /*if (!File("zr/z").exists()) {
             ShellUtil.execCommand("mkdir zr\ncd zr\ntouch z\ncd .. \nchmod -R 777 zr", true)
 
@@ -107,7 +102,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
 
         initPreferences()
-        switchSuspensionWindow(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("switch_preference", false))
 
     }
 
@@ -134,54 +128,50 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             isChecked = isAccessibility
             setOnCheckedChangeListener(this@MainActivity)
         }
-        isStart()
+
     }
 
     private fun isStart(): Boolean {
+
+
         Log.d(TAG, "isStart")
-        for (i in accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)) {
-            Log.d(TAG,"-->")
-            Log.d(TAG,"-->"+i.packageNames[0])
-            if (i.id == "$packageName/.MyAccessibilityService") {
-                return true
+        accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)?.also {
+            for (i in it) {
+                Log.d(TAG, "-->")
+                Log.d(TAG, "-->" + i.id + "  " + i.packageNames[0])
+                if (i.id == "$packageName/.MyAccessibilityService") {
+                    Toast.makeText(this@MainActivity, i.packageNames[0], Toast.LENGTH_SHORT).show()
+                    return true
+                }
             }
         }
+
         return false
     }
 
 
-    private fun showSuspensionWindow() {
-        if (suspensionWindow == null) {
-            suspensionWindow = SuspensionWindow(this@MainActivity)
-        }
-        suspensionWindow!!.show()
-    }
-
-    private fun dismissSuspensionWindow() {
-        if (suspensionWindow != null) {
-            suspensionWindow!!.hide()
-            suspensionWindow = null
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_CODE_DRAW_OVERLAYS_PERMISSION -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (Settings.canDrawOverlays(applicationContext)) {
-                    Toast.makeText(this, getString(R.string.no_suspension_windows_permission), Toast.LENGTH_SHORT).show()
-                } else {
-                    showSuspensionWindow()
+            REQUEST_CODE_DRAW_OVERLAYS_PERMISSION ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (Settings.canDrawOverlays(applicationContext)) {
+                        Toast.makeText(this, getString(R.string.no_suspension_windows_permission), Toast.LENGTH_SHORT).show()
+                    } else {
+                        SuspensionWindow.showSuspensionWindow(this)
+                    }
                 }
-            }
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        return super.onKeyDown(keyCode, event)
     }
 
     companion object {
         private const val TAG = "MainActivity"
         private const val REQUEST_CODE_DRAW_OVERLAYS_PERMISSION = 1000
 
-        private var suspensionWindow: SuspensionWindow? = null
     }
 
 

@@ -1,14 +1,20 @@
 package cn.zr;
 
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.util.Log;
+import android.view.accessibility.AccessibilityManager;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import cn.zr.contentProviderPreference.RemotePreferences;
 import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -17,6 +23,8 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 adb install C:\Users\Administrator\Desktop\backup\release\app-release.apk
 adb push C:\Users\Administrator\Desktop\backup\release\app-release.apk sdcard/Download/
+
+com.sdu.didi.gsui
  */
 public class TestModule implements IXposedHookLoadPackage {
     private void print(String s) {
@@ -35,7 +43,7 @@ public class TestModule implements IXposedHookLoadPackage {
         } else {
             packageSourceDir = prefs.getString("sourceDir", systemContext.getPackageManager().getApplicationInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA).sourceDir);
         }
-        print("getString sourceDir" + packageSourceDir);
+        //print("getString sourceDir" + packageSourceDir);
 
 
         PathClassLoader pathClassLoader = new PathClassLoader(packageSourceDir, ClassLoader.getSystemClassLoader());
@@ -43,4 +51,8 @@ public class TestModule implements IXposedHookLoadPackage {
         Method aClassMethod = aClass.getMethod("handleLoadPackage", XC_LoadPackage.LoadPackageParam.class);
         aClassMethod.invoke(aClass.newInstance(), lpparam);
     }
+
+
+
+
 }

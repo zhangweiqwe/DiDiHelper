@@ -4,18 +4,38 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * Created by zhongxiang.huang on 2017/6/23.
  */
 
 public class SuspensionWindow implements View.OnTouchListener {
+
+
+    private static SuspensionWindow INSTANCE = null;
+
+    public static void showSuspensionWindow(Context context) {
+        if (INSTANCE == null) {
+            INSTANCE = new SuspensionWindow(context.getApplicationContext());
+        }
+        INSTANCE.show();
+    }
+
+    public static void dismissSuspensionWindow() {
+        if (INSTANCE != null) {
+            INSTANCE.hide();
+        }
+    }
 
     private static final String TAG = "SuspensionWindow";
 
@@ -27,20 +47,45 @@ public class SuspensionWindow implements View.OnTouchListener {
 
     private int width, height;
 
-    public SuspensionWindow(final Context context) {
-        width = height = DensityUtils.dp2px(context, 48);
+
+    private static final Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (INSTANCE != null) {
+                INSTANCE.textView.setText((CharSequence) msg.obj);
+            }
+        }
+    };
+
+    public static void showMsg(CharSequence charSequence) {
+        if (charSequence == null || INSTANCE == null) {
+            return;
+        }
+        Message msg = Message.obtain();
+        msg.obj = charSequence;
+        handler.sendMessage(msg);
+    }
+
+    private TextView textView;
+
+    private SuspensionWindow(final Context context) {
+        width = height = DensityUtils.dp2px(context, 180);
 
         Log.d(TAG, "SuspensionWindow(Context context)");
 
-        ImageView imageView = new ImageView(context);
-        imageView.setBackgroundResource(R.mipmap.ic_launcher_round);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        textView = new TextView(context);
+        textView.setBackgroundColor(0x66000000);
+        textView.setTextColor(0xffffffff);
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, MainActivity.class));
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
-        view = imageView;
+        view = textView;
         view.setOnTouchListener(this);
 
         layoutParams = new WindowManager.LayoutParams();
@@ -69,6 +114,9 @@ public class SuspensionWindow implements View.OnTouchListener {
 
     private float rawX, rawY, x, y;
 
+
+    private boolean move = false;
+
     private boolean floatLayoutTouch(MotionEvent motionEvent) {
 
         switch (motionEvent.getAction()) {
@@ -77,6 +125,7 @@ public class SuspensionWindow implements View.OnTouchListener {
                 y = motionEvent.getY();
                 rawX = motionEvent.getRawX();
                 rawY = motionEvent.getRawY();
+                move = false;
                 break;
             case MotionEvent.ACTION_MOVE:
                 rawX = motionEvent.getRawX();
@@ -84,11 +133,12 @@ public class SuspensionWindow implements View.OnTouchListener {
                 layoutParams.x = (int) (rawX - x);
                 layoutParams.y = (int) (rawY - y);
                 windowManager.updateViewLayout(view, layoutParams);
+                move = true;
                 break;
             case MotionEvent.ACTION_UP:
                 break;
         }
-        return false;
+        return move;
     }
 
     public void show() {

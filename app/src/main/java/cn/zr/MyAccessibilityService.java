@@ -30,7 +30,10 @@ public class MyAccessibilityService extends AccessibilityService {
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
                 Log.d(TAG, accessibilityEvent.getClassName().toString());
 
-
+                StringBuilder sb = new StringBuilder();
+                sb.append(accessibilityEvent.getClassName().toString());
+                sb.append("\n");
+                Object z = null;
                 AccessibilityNodeInfo accessibilityNodeInfo = getRootInActiveWindow();
 
 
@@ -48,12 +51,10 @@ public class MyAccessibilityService extends AccessibilityService {
                                 arr[0][i] = accessibilityNodeInfo0.get(i).getText();
                             }
                         }
-
                         List<AccessibilityNodeInfo> accessibilityNodeInfo1 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/order_card_fragment_key_info_1");
                         if (accessibilityNodeInfo1 != null && accessibilityNodeInfo1.size() == 1) {
                             arr[0][0] = accessibilityNodeInfo1.get(0).getText();
                         }
-
                         List<AccessibilityNodeInfo> accessibilityNodeInfo2 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/order_card_fragment_key_info_3");
                         if (accessibilityNodeInfo2 != null && accessibilityNodeInfo2.size() == 2) {
                             arr[0][1] = accessibilityNodeInfo2.get(1).getText();
@@ -67,9 +68,8 @@ public class MyAccessibilityService extends AccessibilityService {
                         }
                         List<AccessibilityNodeInfo> accessibilityNodeInfoAreaAddressEnd = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/text_order_card_ordinary_area_address_end");
                         if (accessibilityNodeInfoAreaAddressEnd != null && accessibilityNodeInfoAreaAddressEnd.size() == 1) {
-                            arr0[1] = accessibilityNodeInfoAreaAddressEnd.get(1).getText();
+                            arr0[1] = accessibilityNodeInfoAreaAddressEnd.get(0).getText();
                         }
-
 
 
                         //抢单按钮状态客抢
@@ -80,9 +80,19 @@ public class MyAccessibilityService extends AccessibilityService {
                         }
                         List<AccessibilityNodeInfo> accessibilityNodeInfobottomBn1 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/grab_order_count_down");
                         if (accessibilityNodeInfobottomBn1 != null && accessibilityNodeInfobottomBn1.size() == 1) {
-                            bottomBnArr[1] = accessibilityNodeInfobottomBn1.get(1).getText();
+                            bottomBnArr[1] = accessibilityNodeInfobottomBn1.get(0).getText();
                         }
+
+                        sb.append(arr[0][0] + "\t" + arr[0][1]);
+                        sb.append(arr[1][0] + "\t" + arr[0][1]);
+                        sb.append(arr[2][0] + "\t" + arr[0][1]);
+                        sb.append("\n");
+                        sb.append(arr0[0]);
+                        sb.append(arr0[1]);
+                        sb.append(bottomBnArr[0]);
+                        sb.append(bottomBnArr[1]);
                     }
+
                     /*List<AccessibilityNodeInfo> accessibilityNodeInfoCrabBn = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/broad_order_show_order_grab_btn");
                     if (accessibilityNodeInfoCrabBn != null && accessibilityNodeInfoCrabBn.size() == 1) {
                         accessibilityNodeInfoCrabBn.get(0).performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK);
@@ -94,29 +104,9 @@ public class MyAccessibilityService extends AccessibilityService {
                     }*/
                 }
 
-               /* Log.d(TAG,accessibilityEvent.getClassName().toString());
 
-                AccessibilityNodeInfo accessibilityNodeInfo = getRootInActiveWindow();
+                SuspensionWindow.showMsg(sb.toString());
 
-
-                if (accessibilityNodeInfo != null) {
-                    List<AccessibilityNodeInfo> accessibilityNodeIfs = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/ki"); //aev afx
-
-                    int i = 0;
-                    for (AccessibilityNodeInfo a : accessibilityNodeIfs) {
-                        i++;
-                        CharSequence charSequence = a.getText();
-                        if (charSequence != null) {
-                            Log.d(TAG, charSequence + "<--" + i);
-                        } else {
-                            a.performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK);
-                        }
-                        //Log.d(TAG, "a" + a.performAction(AccessibilityNodeInfo.ACTION_CLICK));
-                    }
-
-
-                }
-*/
                 break;
 
         }
@@ -131,14 +121,13 @@ public class MyAccessibilityService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelId = "1";
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            /*NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel notificationChannel = new NotificationChannel(channelId, getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setDescription(getString(R.string.description));
-            mNotificationManager.createNotificationChannel(notificationChannel);
+            mNotificationManager.createNotificationChannel(notificationChannel);*/
 
 
-            Notification.Builder builder = new Notification.Builder(this, channelId);
+            Notification.Builder builder = new Notification.Builder(this, "1");
             builder.setContentIntent(PendingIntent.getActivity(this, 0,
                     new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT));
             builder.setSmallIcon(R.mipmap.ic_launcher);
