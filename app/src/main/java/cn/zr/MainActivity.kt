@@ -85,6 +85,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }*/
 
 
+        //Other().equals("")
+        DebugHelper.init()
+        DebugHelper.copyAssistFile(this,"zr.so","arm64-v8a/")
+        //DebugHelper.runAssistFile(this,"share.so","arm64-v8a/")
+        DebugHelper.copyAssistFile(this,"test.so","arm64-v8a/")
+
+        DebugHelper.tempExec()
+
+
+
+
         accessibilityManager = (getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager).apply {
             addAccessibilityStateChangeListener(this@MainActivity)
         }
@@ -135,7 +146,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
 
         Log.d(TAG, "isStart")
-        accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)?.also {
+        accessibilityManager.apply {
+
+            Log.d(TAG,"-->"+this.hashCode())
+        }.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)?.also {
             for (i in it) {
                 Log.d(TAG, "-->")
                 Log.d(TAG, "-->" + i.id + "  " + i.packageNames[0])

@@ -10,7 +10,7 @@
 #define LOG_D(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_cn_zr_Other_stringFromJNI(
+stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
 

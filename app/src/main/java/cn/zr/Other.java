@@ -9,11 +9,12 @@ import de.robv.android.xposed.XposedBridge;
 public class Other {
 
     static {
-        System.loadLibrary("native-lib");
+        //System.loadLibrary("native-lib");
+        //System.loadLibrary("share");
     }
 
     private static final String TAG = "Other";
-    public native String stringFromJNI();
+    //public native String stringFromJNI();
     public Other() {
     }
 

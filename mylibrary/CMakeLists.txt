@@ -14,9 +14,9 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/main/assets/${ANDROID_ABI}")
 
-set(SRC_LIST src/main/cpp/injector.c src/main/cpp/main.c src/main/cpp/ptrace.c src/main/cpp/utils.c src/main/cpp/share.c)
+set(SRC_LIST src/main/jni/test.c)
 add_executable( # Sets the name of the library.
-        zr.so
+        test.so
 
         # Sets the library as a shared library.
         #SHARED
@@ -25,15 +25,6 @@ add_executable( # Sets the name of the library.
         ${SRC_LIST})
 
 
-set(SRC_LIST2 src/main/cpp/share.c)
-add_library( # Sets the name of the library.
-        share
-
-        # Sets the library as a shared library.
-        SHARED
-
-        # Provides a relative path to your source file(s).
-        ${SRC_LIST2})
 
 #[[set(SRC_LIST3 src/main/cpp/dll/test.c)
 add_executable( # Sets the name of the library.
@@ -63,18 +54,12 @@ find_library( # Sets the name of the path variable.
 # build script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( # Specifies the target library.
-        zr.so
+        test.so
 
         # Links the target library to the log library
         # included in the NDK.
         ${log-lib})
 
-target_link_libraries( # Specifies the target library.
-        share
-
-        # Links the target library to the log library
-        # included in the NDK.
-        ${log-lib})
 
 
 #[[
