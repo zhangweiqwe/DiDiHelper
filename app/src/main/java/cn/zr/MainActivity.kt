@@ -18,6 +18,7 @@ import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.Toast
 import cn.zr.contentProviderPreference.RemotePreferences
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.lang.reflect.Modifier
 
@@ -76,24 +77,25 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         setContentView(R.layout.activity_main)
         getResult()
         Log.d(TAG, "onCreate")
-        //Other().stringFromJNI()
 
-
-        /*if (!File("zr/z").exists()) {
-            ShellUtil.execCommand("mkdir zr\ncd zr\ntouch z\ncd .. \nchmod -R 777 zr", true)
-
-        }*/
 
 
         //Other().equals("")
         DebugHelper.init()
-        DebugHelper.copyAssistFile(this,"zr.so","arm64-v8a/")
+        DebugHelper.copyAssistFile(this, "zr.so", "arm64-v8a/")
         //DebugHelper.runAssistFile(this,"share.so","arm64-v8a/")
-        DebugHelper.copyAssistFile(this,"test.so","arm64-v8a/")
+        //DebugHelper.copyAssistFile(this, "test.so", "arm64-v8a/")
 
-        DebugHelper.tempExec()
+        DebugHelper.initExec(this)
+        DebugHelper.exec()
 
+        bn.setOnClickListener {
+            DebugHelper.exec()
+        }
 
+        bn0.setOnClickListener {
+            DebugHelper.check()
+        }
 
 
         accessibilityManager = (getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager).apply {
@@ -148,7 +150,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         Log.d(TAG, "isStart")
         accessibilityManager.apply {
 
-            Log.d(TAG,"-->"+this.hashCode())
+            Log.d(TAG, "-->" + this.hashCode())
         }.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)?.also {
             for (i in it) {
                 Log.d(TAG, "-->")

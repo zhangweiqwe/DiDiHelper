@@ -5,9 +5,12 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * modified form Trinea
@@ -18,144 +21,68 @@ import java.util.List;
 public class ShellUtil {
 
     private static final String TAG = "ShellUtil";
+    private static ExecutorService executorService = Executors.newCachedThreadPool();
 
     /**
      * check whether has root permission
      */
-    public static boolean hasRootPermission() {
-        return execCommand("echo root", true, false).result == 0;
+
+    public static void exec(String command) {
+        exec(command, true, null);
     }
 
-    public static CommandResult execCommand(String command, boolean isRoot) {
-        return execCommand(new String[]{command}, isRoot, true);
+    public static void exec(String command, OnResultListener onResultListener) {
+        exec(command, true, onResultListener);
     }
 
-    public static CommandResult execCommand(String command, boolean isRoot, boolean isNeedResultMsg) {
-        return execCommand(new String[]{command}, isRoot, isNeedResultMsg);
+    public static void exec(String command, boolean isRoot) {
+        exec(command, isRoot, null);
     }
 
-    public static CommandResult execCommand(List<String> commands, boolean isRoot, boolean isNeedResultMsg) {
-        return execCommand(commands == null ? null : commands.toArray(new String[]{}), isRoot, isNeedResultMsg);
-    }
-
-    /**
-     * execute shell commands
-     * {@link CommandResult#result} is -1, there maybe some excepiton.
-     *
-     * @param commands     command array
-     * @param isRoot       whether need to run with root
-     * @param needResponse whether need result msg
-     */
-    public static CommandResult execCommand(String[] commands, boolean isRoot, boolean needResponse) {
-        int result = -1;
-        if (commands == null || commands.length == 0) {
-            return new CommandResult(result, null, null);
+    public static void exec(String command, boolean isRoot, final OnResultListener onResultListener) {
+        if (command == null || command.length() == 0) {
+            new Throwable("nonsupport");
         }
 
+        Log.d(TAG, command);
         Process process = null;
-        BufferedReader successResult = null;
-        BufferedReader errorResult = null;
-        ArrayList<String> successMsg = null;
-        ArrayList<String> errorMsg = null;
-
-        DataOutputStream os = null;
+        DataOutputStream dataOutputStream = null;
         try {
+
             process = Runtime.getRuntime().exec(isRoot ? COMMAND_SU : COMMAND_SH);
-            os = new DataOutputStream(process.getOutputStream());
-            for (String command : commands) {
-                if (command == null) {
-                    continue;
-                }
+            dataOutputStream = new DataOutputStream(process.getOutputStream());
+            dataOutputStream.write(command.getBytes());
+            dataOutputStream.writeBytes(COMMAND_LINE_END);
+            dataOutputStream.writeBytes(COMMAND_EXIT);
+            dataOutputStream.flush();
+            dataOutputStream.close();
+            executorService.submit(new ResultReader(onResultListener, process, false));
+            executorService.submit(new ResultReader(onResultListener, process, true));
+            process.waitFor();
 
-                // donnot use os.writeBytes(commmand), avoid chinese charset error
-                os.write(command.getBytes());
-                os.writeBytes(COMMAND_LINE_END);
-                os.flush();
-            }
-            os.writeBytes(COMMAND_LINE_END);
-
-            os.writeBytes(COMMAND_EXIT);
-            os.flush();
-
-            /*os.writeBytes(COMMAND_LINE_END);
-            os.flush();*/
-
-            result = process.waitFor();
-            if (needResponse) {
-
-                String s;
-
-
-                Log.d(TAG, "process.exitValue()" + process.exitValue());
-
-                if (process.exitValue() == 0) {
-                    successMsg = new ArrayList<String>();
-                    successResult = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-                    while ((s = successResult.readLine()) != null) {
-                        Log.d(TAG, "successResult.readLine()-->" + s + "<");
-                        successMsg.add(s);
-                    }
-
-
-                } else {
-                    errorMsg = new ArrayList<String>();
-                    errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                    /*while ((s = errorResult.readLine()) != null) {
-                        Log.d(TAG, "errorResult.readLine()-->" + s+"<");
-                        errorMsg.add(s);
-                    }*/
-
-                    s = errorResult.readLine();
-                    errorMsg.add(s);
-                    Log.d(TAG, "errorResult.readLine()-->" + s + "<");
-
-                }
-
-                Log.d(TAG, "->end");
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            process.destroy();
             try {
-                if (errorResult != null) {
-                    errorResult.close();
-                }
-                if (successResult != null) {
-                    successResult.close();
-                }
-                if (os != null) {
-                    os.close();
-                }
+                dataOutputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                if (process != null) {
-                    process.destroy();
-                }
             }
-
         }
-        return new CommandResult(result, successMsg, errorMsg);
+
+        Log.d(TAG, "-->exec end");
     }
 
-    public static class CommandResult {
+    public static class Result {
 
         public int result;
-        public ArrayList<String> responseMsg;
-        public ArrayList<String> errorMsg;
+        public List<String> data;
 
-        public CommandResult(int result) {
-            this.result = result;
-        }
 
-        public CommandResult(int result, ArrayList<String> responseMsg, ArrayList<String> errorMsg) {
+        public Result(int result, List<String> data) {
             this.result = result;
-            this.responseMsg = responseMsg;
-            this.errorMsg = errorMsg;
+            this.data = data;
         }
     }
 
@@ -163,6 +90,73 @@ public class ShellUtil {
     public static final String COMMAND_SH = "sh";
     public static final String COMMAND_EXIT = "exit\n";
     public static final String COMMAND_LINE_END = "\n";
+
+    public interface OnResultListener {
+        void onResult(Result result);
+    }
+
+    static class ResultReader implements Runnable {
+        private OnResultListener onResultListener;
+        private Process process;
+        private boolean isError;
+
+        public ResultReader(OnResultListener onResultListener, Process process, boolean isError) {
+            this.onResultListener = onResultListener;
+            this.process = process;
+            this.isError = isError;
+
+        }
+
+        @Override
+        public void run() {
+            InputStream in;
+            if (isError) {
+                in = process.getErrorStream();
+            } else {
+                in = process.getInputStream();
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            List<String> data = new ArrayList<>();
+
+            try {
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    data.add(line);
+                    Log.d(TAG, "-->" + line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    process.waitFor();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                process.destroy();
+                int exitValue = process.exitValue();
+
+                if (onResultListener != null) {
+                    if(isError){
+                        if(exitValue!=0){
+                            onResultListener.onResult(new Result(exitValue, data));
+                        }
+                    }else {
+                        onResultListener.onResult(new Result(exitValue, data));
+                    }
+                }
+                Log.d(TAG, "--> exitValue" + exitValue);
+
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+
 
 
 }

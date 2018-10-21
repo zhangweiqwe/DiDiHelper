@@ -7,12 +7,10 @@
 #define LIBC_PATH      "/system/lib64/libc.so"
 #define LINKER_PATH    "/system/lib64/libdl.so"
 #define VNDK_LIB_PATH  "/system/lib64/libRS.so"
-#define REMOTE_CUSTOM_LIB_PATH  "/data/local2/share.so"
 #else
 #define LIBC_PATH      "/system/lib/libc.so"
 #define LINKER_PATH    "/system/lib/libdl.so"
 #define VNDK_LIB_PATH  "/system/lib/libRS.so"
-#define REMOTE_CUSTOM_LIB_PATH  "/data/local/share.so"
 #endif
 
 long CallMmap(pid_t pid, size_t length);

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/user.h>
+//#include <sys/user.h>
+//#include <asm/user.h>
 #include <asm/ptrace.h>
 #include <sys/ptrace.h>
 #include <sys/wait.h>
@@ -11,27 +12,57 @@
 #include <string.h>
 #include <elf.h>
 #include <android/log.h>
-#include <arm-linux-androideabi/asm/ptrace.h>
 #include <errno.h>
+
+#if defined(__aarch64__)
+#define pt_regs  user_pt_regs
+#define uregs    regs
+#define ARM_r0   regs[0]
+#define ARM_lr   regs[30]
+#define ARM_sp   sp
+#define ARM_pc   pc
+#define ARM_cpsr pstate
+#endif
+
 //T标志位：该位反映处理器的运行状态。当该位为1时，程序运行于THUMB状态，否则运行于ARM状态。//
 #define CPSR_T_MASK     ( 1u << 5 )//32位CPSR寄存器
 const char *libc_path = "/system/lib/libc.so";
 
 const int long_size = sizeof(long);
 
-int ptrace_setregs(pid_t pid, struct pt_regs * regs)
+/*int ptrace_setregs(pid_t pid, struct pt_regs * regs)
 {
-    if (ptrace(PTRACE_SETREGS, pid, NULL, regs) < 0) {
+    if (ptrace(PTRACE_SETREGSET, pid, NT_PRSTATUS, regs) < 0) {
         perror("ptrace_setregs: Can not set register values");
         return -1;
     }
 
     return 0;
-}
+}*/
 
+
+int ptrace_setregs(pid_t pid, struct pt_regs * regs)
+{
+#if defined(__aarch64__)
+    struct {
+        void* ufb;
+        size_t len;
+    } regsvec = { regs, sizeof(struct pt_regs) };
+
+    if (ptrace(PTRACE_SETREGSET, pid, NT_PRSTATUS, &regsvec) < 0) {
+        perror("ptrace_setregs: Can not set register values");
+        return -1;
+    }
+    ;
+#else
+    ptrace(PTRACE_SETREGS, pid, NULL, regs);
+#endif
+
+    return 0;
+}
 int ptrace_continue(pid_t pid)
 {
-    if (ptrace(PTRACE_CONT, pid, NULL, 0) < 0) {
+    if (ptrace(PTRACE_CONT, pid, NULL, NULL) < 0) {
         perror("ptrace_cont");
         return -1;
     }
@@ -189,7 +220,7 @@ void injectSo(pid_t pid,char* so_path, char* function_name,char* parameter)
 
 //save old regs
 
-    ptrace(PTRACE_GETREGS, pid, NULL, &old_regs);//获取目标pid之寄存器值存入old_regs中
+    ptrace(PTRACE_GETREGSET, pid, NULL, &old_regs);//获取目标pid之寄存器值存入old_regs中
     memcpy(&regs, &old_regs, sizeof(regs));//旧寄存器值保存在regs中
     //void *memcpy(void *dest, const void *src, size_t n);
     //size_t：size_t是标准C库中定义的，应为unsigned int，在64位系统中为 long unsigned int
@@ -227,7 +258,7 @@ void injectSo(pid_t pid,char* so_path, char* function_name,char* parameter)
     parameters[5] = 0; //offset
     
     ptrace_call(pid, mmap_addr, parameters, 6, &regs);
-    ptrace(PTRACE_GETREGS, pid, NULL, &regs);
+    ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &regs);
 
     long map_base = regs.ARM_r0;
     printf("map_base = %p\n", (void*)map_base);
@@ -241,7 +272,7 @@ void injectSo(pid_t pid,char* so_path, char* function_name,char* parameter)
     parameters[1] = RTLD_NOW| RTLD_GLOBAL;
 
     ptrace_call(pid, dlopen_addr, parameters, 2, &regs);
-    ptrace(PTRACE_GETREGS, pid, NULL, &regs);
+    ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &regs);
     
     long handle = regs.ARM_r0;
     
@@ -256,7 +287,7 @@ void injectSo(pid_t pid,char* so_path, char* function_name,char* parameter)
     parameters[1] = map_base;
 
     ptrace_call(pid, dlsym_addr, parameters, 2, &regs);
-    ptrace(PTRACE_GETREGS, pid, NULL, &regs);
+    ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &regs);
     
     long function_ptr = regs.ARM_r0;
 
@@ -279,7 +310,7 @@ void injectSo(pid_t pid,char* so_path, char* function_name,char* parameter)
     
 //restore old regs
 
-    ptrace(PTRACE_SETREGS, pid, NULL, &old_regs);
+    ptrace(PTRACE_SETREGSET, pid, NT_PRSTATUS, &old_regs);
 }
 
 
@@ -300,12 +331,12 @@ int main(int argc, char *argv[])
         return 1;
     }
     
-    char* so_path = "/data/local/tmp/libinject.so";//待动态加载的so路径
+    char* so_path = "/data/local2/arm64-v8a/libinject.so";//待动态加载的so路径
     char* function_name = "mzhengHook";
     char* parameter = "sevenWeapons";
     injectSo(pid, so_path, function_name, parameter);//利用Ptrace动态加载so并执行自定义函数
     
-    ptrace(PTRACE_DETACH, pid, NULL, 0);//断开附加
+    ptrace(PTRACE_DETACH, pid, NULL, NULL);//断开附加
     
     return 0;
 }
