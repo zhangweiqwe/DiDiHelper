@@ -1,5 +1,6 @@
 package cn.zr
 
+import android.Manifest
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,8 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.preference.PreferenceManager
 import android.util.Log
 import android.view.KeyEvent
@@ -78,8 +81,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         getResult()
         Log.d(TAG, "onCreate")
 
-
-
         //Other().equals("")
         DebugHelper.init()
         DebugHelper.copyAssistFile(this, "zr.so", "arm64-v8a/")
@@ -96,7 +97,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         bn0.setOnClickListener {
             DebugHelper.check()
         }
-
+        //dx  --dex --output jar.dex dex.jar
 
         accessibilityManager = (getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager).apply {
             addAccessibilityStateChangeListener(this@MainActivity)

@@ -1,21 +1,21 @@
-#include <unistd.h>
-#include <stdio.h>
 #include <android/log.h>
-#include <elf.h>
-#include <dlfcn.h>
-#include "include/test.h"
+#include <stdarg.h>
+#include <stdio.h>
+#include <zconf.h>
 
-#define LOG_TAG "Share"
-#define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, fmt, ##args)
 
-long hookLoad(long l) {
-    long a = l + 2;
-    //so函数，打印so之pid与传入的字符串
-    printf("mzheng Hook pid = %d\n", getpid());
-    printf("Hello %s\n", "fsdaf");
-    LOGD("mzheng Hook pid = %d\n", getpid());
-    LOGD("Hello %s\n", "fdsafasdfasdffd");
-    LOGD("Hello %ld\n", a);
-    return a;
+#define TAG "Hook Library"
+#define LOG_TAG "Debug"
+#define LOG_D(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+
+int my_printf(long l) {
+
+
+
+    LOG_D("---->data = %s<-----12345 %d %ld\n", "in", getpid(),l);
+    va_list args;
+    /*va_start(args, format);
+    int ret = __android_log_vprint(ANDROID_LOG_DEBUG, TAG, format, args);
+    va_end(args);*/
+    return 12;
 }
-

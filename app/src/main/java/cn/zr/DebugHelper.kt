@@ -18,15 +18,27 @@ class DebugHelper {
         private const val TAG = "DebugHelper"
         private const val ROOT_PATH = "/data/local2/"
         private const val LIB_SHARE_NAME = "libshare.so"
+        //com.eatbeancar.user
+        private const val TARGET_PACKAGE_NAME = "com.vixkw.pubgmhd.myapplication"
 
-        private const val TARGET_PACKAGE_NAME = "com.eatbeancar.user"
-
+        /*
+        dx --dex --output=new_log.jar lib.jar
+        Android\sdk\build-tools\23.0.0
+         */
         fun init() {
             ShellUtil.exec("mkdir $ROOT_PATH\nchmod -R 777 $ROOT_PATH", OnResultListener())
         }
 
         fun copyAssistFile(context: Context, fileName: String, filePath: String) {
 
+            /*
+
+            //https://blog.csdn.net/xiaoxiangyuhai/article/details/76270294
+avc: denied  { 操作权限  }  for pid=7201  comm=“进程名”  scontext=u:r:源类型:s0  tcontext=u:r:目标类型:s0  tclass=访问类别  permissive=0
+
+            getenforce
+            setenforce 0
+             */
 
             val inS = context.applicationContext.assets.open("$filePath$fileName")
             val out = FileOutputStream(File("$ROOT_PATH$fileName"))

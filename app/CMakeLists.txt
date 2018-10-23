@@ -14,7 +14,7 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/src/main/assets/${ANDROID_ABI}")
 
-set(SRC_LIST src/main/cpp/injector.c src/main/cpp/main.c src/main/cpp/ptrace.c src/main/cpp/utils.c src/main/cpp/share.c)
+set(SRC_LIST src/main/cpp/injector.c src/main/cpp/main.c src/main/cpp/ptrace.c src/main/cpp/utils.c src/main/cpp/share.c src/main/cpp/utils.c src/main/cpp/elf_utils.c)
 add_executable( # Sets the name of the library.
         zr.so
 
