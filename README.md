@@ -1,2 +1,2 @@
 # zr2
-android progress inject arm64-v8a
+android process inject arm64-v8a
