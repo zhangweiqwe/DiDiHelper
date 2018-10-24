@@ -26,7 +26,7 @@ class DebugHelper {
         Android\sdk\build-tools\23.0.0
          */
         fun init() {
-            ShellUtil.exec("mkdir $ROOT_PATH\nchmod -R 777 $ROOT_PATH", OnResultListener())
+            ShellUtil.exec("setenforce 0\nmkdir $ROOT_PATH\nchmod -R 777 $ROOT_PATH", OnResultListener())
         }
 
         fun copyAssistFile(context: Context, fileName: String, filePath: String) {
