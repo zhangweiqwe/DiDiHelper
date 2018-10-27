@@ -103,6 +103,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             addAccessibilityStateChangeListener(this@MainActivity)
         }
 
+
+
         supportActionBar?.apply {
             setDisplayShowCustomEnabled(true)
             customView = Switch(this@MainActivity).apply {
