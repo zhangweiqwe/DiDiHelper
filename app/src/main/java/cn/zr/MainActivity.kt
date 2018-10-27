@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         Log.d(TAG, "onCreate")
 
         //Other().equals("")
-        DebugHelper.init()
+        /*DebugHelper.init()
         DebugHelper.copyAssistFile(this, "zr.so", "arm64-v8a/")
         //DebugHelper.runAssistFile(this,"share.so","arm64-v8a/")
         //DebugHelper.copyAssistFile(this, "test.so", "arm64-v8a/")
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         bn0.setOnClickListener {
             DebugHelper.check()
-        }
+        }*/
         //dx  --dex --output jar.dex dex.jar
 
         accessibilityManager = (getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager).apply {
