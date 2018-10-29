@@ -26,6 +26,15 @@ import java.io.File
 import java.lang.reflect.Modifier
 
 
+/**
+ * adb shell uiautomator dump /data/local/tmp/app.uix
+adb shell screencap -p /data/local/tmp/app.png
+
+
+adb pull /data/local/tmp/app.uix d:/tmp/app.uix
+adb pull /data/local/tmp/app.png d:/tmp/app.png
+ *
+ */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
 
     private lateinit var remotePreferences: RemotePreferences

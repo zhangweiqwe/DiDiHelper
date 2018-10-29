@@ -41,7 +41,7 @@ public class MyAccessibilityService extends AccessibilityService {
                 AccessibilityNodeInfo accessibilityNodeInfo = getRootInActiveWindow();
 
 
-                if (accessibilityNodeInfo != null) {
+                /*if (accessibilityNodeInfo != null) {
                     //com.sdu.didi.gsui:id/order_card_fragment_key_info_1 明天 1
                     //com.sdu.didi.gsui:id/order_card_fragment_key_info_3 公里  2
                     //com.sdu.didi.gsui:id/order_card_fragment_key_info_3 公里 3
@@ -97,7 +97,7 @@ public class MyAccessibilityService extends AccessibilityService {
                         sb.append(bottomBnArr[1]);
                     }
 
-                    /*List<AccessibilityNodeInfo> accessibilityNodeInfoCrabBn = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/broad_order_show_order_grab_btn");
+                    *//*List<AccessibilityNodeInfo> accessibilityNodeInfoCrabBn = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/broad_order_show_order_grab_btn");
                     if (accessibilityNodeInfoCrabBn != null && accessibilityNodeInfoCrabBn.size() == 1) {
                         accessibilityNodeInfoCrabBn.get(0).performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK);
                     }
@@ -105,8 +105,8 @@ public class MyAccessibilityService extends AccessibilityService {
                     List<AccessibilityNodeInfo> accessibilityNodeInfoExitBn = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/title_view_image");
                     if (accessibilityNodeInfoExitBn != null && accessibilityNodeInfoCrabBn.size() == 1) {
                         accessibilityNodeInfoExitBn.get(0).performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK);
-                    }*/
-                }
+                    }*//*
+                }*/
 
 
                 SuspensionWindow.showMsg(sb.toString());
