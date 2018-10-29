@@ -163,6 +163,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     Toast.makeText(this@MainActivity, i.packageNames[0], Toast.LENGTH_SHORT).show()
                     return true
                 }
+
             }
 
         }
