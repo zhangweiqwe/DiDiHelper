@@ -1,14 +1,18 @@
 package cn.zr
 
+import android.Manifest
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.preference.PreferenceManager
 import android.util.Log
 import android.view.KeyEvent
@@ -17,9 +21,9 @@ import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.Toast
 import cn.zr.contentProviderPreference.RemotePreferences
-import java.io.*
-import java.util.*
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
+import java.lang.reflect.Modifier
 
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
@@ -77,27 +81,29 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         getResult()
         Log.d(TAG, "onCreate")
 
-        /* //Other().equals("")
-         DebugHelper.init()
-         DebugHelper.copyAssistFile(this, "zr.so", "arm64-v8a/")
-         //DebugHelper.runAssistFile(this,"share.so","arm64-v8a/")
-         //DebugHelper.copyAssistFile(this, "test.so", "arm64-v8a/")
+        //Other().equals("")
+        /*DebugHelper.init()
+        DebugHelper.copyAssistFile(this, "zr.so", "arm64-v8a/")
+        //DebugHelper.runAssistFile(this,"share.so","arm64-v8a/")
+        //DebugHelper.copyAssistFile(this, "test.so", "arm64-v8a/")
 
-         DebugHelper.initExec(this)
-         DebugHelper.exec()
+        DebugHelper.initExec(this)
+        DebugHelper.exec()
 
-         bn.setOnClickListener {
-             DebugHelper.exec()
-         }
+        bn.setOnClickListener {
+            DebugHelper.exec()
+        }
 
-         bn0.setOnClickListener {
-             DebugHelper.check()
-         }*/
+        bn0.setOnClickListener {
+            DebugHelper.check()
+        }*/
         //dx  --dex --output jar.dex dex.jar
 
         accessibilityManager = (getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager).apply {
             addAccessibilityStateChangeListener(this@MainActivity)
         }
+
+
 
         supportActionBar?.apply {
             setDisplayShowCustomEnabled(true)
@@ -138,12 +144,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             isChecked = isAccessibility
             setOnCheckedChangeListener(this@MainActivity)
         }
-        //isStart()
 
-
-        isStart()
     }
-
 
     private fun isStart(): Boolean {
 
@@ -151,20 +153,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         Log.d(TAG, "isStart")
         accessibilityManager.apply {
 
-
-            Log.d(TAG, "-->" + this.hashCode() + " ${installedAccessibilityServiceList.hashCode()} " + Collections.unmodifiableList(ArrayList<String>().apply {
-                add("")
-                add("sdf")
-                Log.d(TAG, "   ${this is ArrayList}")
-            }).hashCode())
+            Log.d(TAG, "-->" + this.hashCode())
         }.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)?.also {
-            Log.d(TAG, "getEnabledAccessibilityServiceList = ${it.hashCode()}")
             for (i in it) {
                 Log.d(TAG, "-->")
-
-                Log.d(TAG, "-->" + i.id + "  " + i.packageNames[0] + i.packageNames[1] + i.packageNames[2] + i.id)
+                Log.d(TAG, "-->" + i.id + "  " + i.packageNames[0])
                 if (i.id == "$packageName/.MyAccessibilityService") {
-                    Toast.makeText(this@MainActivity, i.packageNames[0] + " " + i.packageNames[1], Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, i.packageNames[0], Toast.LENGTH_SHORT).show()
                     return true
                 }
             }
