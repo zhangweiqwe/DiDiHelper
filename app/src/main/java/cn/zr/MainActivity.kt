@@ -1,18 +1,14 @@
 package cn.zr
 
-import android.Manifest
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.support.v7.preference.PreferenceManager
 import android.util.Log
 import android.view.KeyEvent
@@ -21,9 +17,7 @@ import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.Toast
 import cn.zr.contentProviderPreference.RemotePreferences
-import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
-import java.lang.reflect.Modifier
+import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -145,7 +139,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setOnCheckedChangeListener(this@MainActivity)
         }
         //isStart()
+
+
+        isStart()
     }
+
 
     private fun isStart(): Boolean {
 
@@ -161,10 +159,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }).hashCode())
         }.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)?.also {
             Log.d(TAG, "getEnabledAccessibilityServiceList = ${it.hashCode()}")
-
             for (i in it) {
                 Log.d(TAG, "-->")
-                Log.d(TAG, "-->" + i.id + "  " + i.packageNames[0])
+
+                Log.d(TAG, "-->" + i.id + "  " + i.packageNames[0] + i.packageNames[1] + i.packageNames[2] + i.id)
                 if (i.id == "$packageName/.MyAccessibilityService") {
                     Toast.makeText(this@MainActivity, i.packageNames[0] + " " + i.packageNames[1], Toast.LENGTH_SHORT).show()
                     return true

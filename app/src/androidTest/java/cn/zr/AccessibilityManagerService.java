@@ -561,6 +561,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
             // The automation service is a fake one and should not be reported
             // to clients as being installed - it really is not.
             UserState userState = getUserStateLocked(resolvedUserId);
+
             if (userState.mUiAutomationService != null) {
                 List<AccessibilityServiceInfo> installedServices = new ArrayList<>();
                 installedServices.addAll(userState.mInstalledServices);
@@ -576,6 +577,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
         if (services == null || services.isEmpty() || !(services instanceof ArrayList)) {
             return services;
         }
+
         List<AccessibilityServiceInfo> infos = (ArrayList<AccessibilityServiceInfo>) (((ArrayList<AccessibilityServiceInfo>) services).clone());
         for (int i = 0; i < services.size(); i++) {
             AccessibilityServiceInfo info = services.get(i);

@@ -6,7 +6,7 @@
     android:canRetrieveWindowContent="true"
     android:description="@string/description"
     android:notificationTimeout="10"
-    android:packageNames="zzr,com.sdu.didi.gsui"
+    android:packageNames="zzr,com.sdu.didi.gui,com.tencent.mobileqq"
     android:settingsActivity="cn.zr.MainActivity" />
 
 

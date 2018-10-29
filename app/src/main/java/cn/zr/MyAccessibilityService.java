@@ -27,6 +27,10 @@ public class MyAccessibilityService extends AccessibilityService {
                 break;
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                 break;
+
+            case AccessibilityEvent.TYPE_ANNOUNCEMENT:
+                Log.d(TAG,"AccessibilityEvent.TYPE_ANNOUNCEMENT "+accessibilityEvent.getText());
+                break;
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
                 Log.d(TAG, accessibilityEvent.getClassName().toString());
 
