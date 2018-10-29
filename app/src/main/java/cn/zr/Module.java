@@ -10,6 +10,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -32,6 +33,23 @@ public class Module implements IXposedHookLoadPackage {
 
     private void print(String s) {
         XposedBridge.log("Module" + "-->" + s + "<");
+    }
+
+    private final List<AccessibilityServiceInfo> prepare(List<AccessibilityServiceInfo> services) {
+        if (services == null || services.isEmpty() || !(services instanceof ArrayList)) {
+            return services;
+        }
+        List<AccessibilityServiceInfo> infos = (ArrayList<AccessibilityServiceInfo>) (((ArrayList<AccessibilityServiceInfo>) services).clone());
+        for (int i = 0; i < services.size(); i++) {
+            AccessibilityServiceInfo info = services.get(i);
+            if (info.packageNames != null && info.packageNames.length > 1) {
+                if (info.packageNames[0].equals("zzr") && info.packageNames[1].equals("com.sdu.didi.gui") && info.getSettingsActivityName().equals("cn.zr.MainActivity")) {
+                    info.packageNames[1] = "kankan";
+                    return infos;
+                }
+            }
+        }
+        return services;
     }
 
     /**

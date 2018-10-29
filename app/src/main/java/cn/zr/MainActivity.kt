@@ -24,6 +24,8 @@ import cn.zr.contentProviderPreference.RemotePreferences
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.lang.reflect.Modifier
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
@@ -81,22 +83,22 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         getResult()
         Log.d(TAG, "onCreate")
 
-        //Other().equals("")
-        DebugHelper.init()
-        DebugHelper.copyAssistFile(this, "zr.so", "arm64-v8a/")
-        //DebugHelper.runAssistFile(this,"share.so","arm64-v8a/")
-        //DebugHelper.copyAssistFile(this, "test.so", "arm64-v8a/")
+        /* //Other().equals("")
+         DebugHelper.init()
+         DebugHelper.copyAssistFile(this, "zr.so", "arm64-v8a/")
+         //DebugHelper.runAssistFile(this,"share.so","arm64-v8a/")
+         //DebugHelper.copyAssistFile(this, "test.so", "arm64-v8a/")
 
-        DebugHelper.initExec(this)
-        DebugHelper.exec()
+         DebugHelper.initExec(this)
+         DebugHelper.exec()
 
-        bn.setOnClickListener {
-            DebugHelper.exec()
-        }
+         bn.setOnClickListener {
+             DebugHelper.exec()
+         }
 
-        bn0.setOnClickListener {
-            DebugHelper.check()
-        }
+         bn0.setOnClickListener {
+             DebugHelper.check()
+         }*/
         //dx  --dex --output jar.dex dex.jar
 
         accessibilityManager = (getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager).apply {
@@ -142,7 +144,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             isChecked = isAccessibility
             setOnCheckedChangeListener(this@MainActivity)
         }
-
+        //isStart()
     }
 
     private fun isStart(): Boolean {
@@ -151,13 +153,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         Log.d(TAG, "isStart")
         accessibilityManager.apply {
 
-            Log.d(TAG, "-->" + this.hashCode())
+
+            Log.d(TAG, "-->" + this.hashCode() + " ${installedAccessibilityServiceList.hashCode()} " + Collections.unmodifiableList(ArrayList<String>().apply {
+                add("")
+                add("sdf")
+                Log.d(TAG, "   ${this is ArrayList}")
+            }).hashCode())
         }.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)?.also {
+            Log.d(TAG, "getEnabledAccessibilityServiceList = ${it.hashCode()}")
+
             for (i in it) {
                 Log.d(TAG, "-->")
                 Log.d(TAG, "-->" + i.id + "  " + i.packageNames[0])
                 if (i.id == "$packageName/.MyAccessibilityService") {
-                    Toast.makeText(this@MainActivity, i.packageNames[0], Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, i.packageNames[0] + " " + i.packageNames[1], Toast.LENGTH_SHORT).show()
                     return true
                 }
             }
