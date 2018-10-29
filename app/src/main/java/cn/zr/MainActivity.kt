@@ -145,6 +145,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setOnCheckedChangeListener(this@MainActivity)
         }
 
+        isStart()
     }
 
     private fun isStart(): Boolean {
@@ -163,6 +164,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     return true
                 }
             }
+
         }
 
         return false
