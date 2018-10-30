@@ -25,7 +25,7 @@ class ConfigManager private constructor() {
             val simpleDateFormat = SimpleDateFormat(ConfigUtil.SIMPLE_DATA_FORMAT)
             configManager.useCarTime = ConfigUtil.parseTimeQuantum(sharedPreferences.getString("use_car_time_key", "${simpleDateFormat.format(System.currentTimeMillis())}" +
                     "${ConfigUtil.SPLIT_FLAG}" +
-                    "${simpleDateFormat.format(System.currentTimeMillis() + 24 * 60 * 60 * 1000)}"))
+                    "${simpleDateFormat.format(System.currentTimeMillis() + 24 * 60 * 60 * 1000)}"))!!
 
         }
 

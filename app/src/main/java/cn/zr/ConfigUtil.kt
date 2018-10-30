@@ -47,23 +47,21 @@ class ConfigUtil {
             return false
         }
 
-        fun parseTimeQuantum(timeQuantumStr: String): TimeQuantum {
-            if (timeQuantumStr.contains(SPLIT_FLAG)) {
-                timeQuantumStr.split(SPLIT_FLAG).also {
-                    if (it.size > 1) {
-                        val simpleDateFormat = SimpleDateFormat(SIMPLE_DATA_FORMAT)
-                        try {
-                            val startTime = simpleDateFormat.parse(it[0].trim())
-                            val endTime = simpleDateFormat.parse(it[1].trim())
-                            return TimeQuantum(startTime, endTime)
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            LogManager.log(e.message)
-                        }
+        fun parseTimeQuantum(timeQuantumStr: String): TimeQuantum? {
+            timeQuantumStr.split(SPLIT_FLAG).also {
+                if (it.size > 1) {
+                    val simpleDateFormat = SimpleDateFormat(SIMPLE_DATA_FORMAT)
+                    try {
+                        val startTime = simpleDateFormat.parse(it[0])
+                        val endTime = simpleDateFormat.parse(it[1])
+                        return TimeQuantum(startTime, endTime)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        LogManager.log(e.message)
                     }
                 }
             }
-            throw Exception()
+            return null
         }
 
     }

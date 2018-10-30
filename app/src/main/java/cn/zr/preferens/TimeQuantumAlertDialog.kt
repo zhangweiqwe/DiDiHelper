@@ -31,7 +31,13 @@ class TimeQuantumAlertDialog(val context: Context, val preference: Preference, v
         val timeQuantum = configManager.useCarTime
         val simpleDateFormat1 = SimpleDateFormat(SIMPLE_DATA_FORMAT_1)
         val simpleDateFormat2 = SimpleDateFormat(SIMPLE_DATA_FORMAT_2)
-        val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance().apply {
+            time = timeQuantum.startTime
+        }
+
+        val calendar1 = Calendar.getInstance().apply {
+            time = timeQuantum.endTime
+        }
 
 
         //preferenceManager.sharedPreferences.getString("use_car_time_key", "2018-12-10 12:00" + ConfigUtil.SPLIT_FLAG + "2019-12-10 12:00")
@@ -78,10 +84,10 @@ class TimeQuantumAlertDialog(val context: Context, val preference: Preference, v
                         (it as TextView).also {
                             it.text = "$year-${month + 1}-$dayOfMonth"
                         }
-                    }, calendar.get(Calendar.YEAR)
-                            , calendar.get(Calendar.MONTH)
-                            , calendar.get(Calendar.DAY_OF_MONTH)).apply {
-                        datePicker.minDate = simpleDateFormat1.parse(startTimeTV.text.toString()).time
+                    }, calendar1.get(Calendar.YEAR)
+                            , calendar1.get(Calendar.MONTH)
+                            , calendar1.get(Calendar.DAY_OF_MONTH)).apply {
+                        //datePicker.minDate = simpleDateFormat1.parse(startTimeTV.text.toString()).time
                     }.show()
                 }
             }
@@ -93,7 +99,7 @@ class TimeQuantumAlertDialog(val context: Context, val preference: Preference, v
                             it.text = "$hourOfDay:$minute"
                         }
                     }
-                            , calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show()
+                            , calendar1.get(Calendar.HOUR_OF_DAY), calendar1.get(Calendar.MINUTE), true).show()
                 }
             }
         })
@@ -112,10 +118,6 @@ class TimeQuantumAlertDialog(val context: Context, val preference: Preference, v
                                 }.apply()
                                 Toast.makeText(context, context.getString(R.string.save_success), Toast.LENGTH_SHORT).show()
                             }
-
-
-                        } else {
-
                         }
                     }
 
