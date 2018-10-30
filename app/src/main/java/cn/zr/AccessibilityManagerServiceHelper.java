@@ -16,7 +16,7 @@ public class AccessibilityManagerServiceHelper {
         for (int i = 0; i < services.size(); i++) {
             AccessibilityServiceInfo info = services.get(i);
             if (info.packageNames != null && info.packageNames.length > 1) {
-                if (info.packageNames[0].equals("cn.a") && info.packageNames[1].equals("com.sdu.didi.gui") && info.getSettingsActivityName().equals("cn.zr.MainActivity")) {
+                if (info.packageNames[0].equals("cn.a") && info.packageNames[1].equals("com.sdu.didi.gsui") && info.getSettingsActivityName().equals("cn.zr.MainActivity")) {
                     List<AccessibilityServiceInfo> prepareHandleData = deepCopy(services);
                     prepareHandleData.get(i).packageNames[1] = "cn.b";
                     return prepareHandleData;

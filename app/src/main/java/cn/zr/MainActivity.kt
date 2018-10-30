@@ -28,11 +28,11 @@ import java.lang.reflect.Modifier
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
 
-    private lateinit var remotePreferences: RemotePreferences
+    //private lateinit var remotePreferences: RemotePreferences
     private fun initPreferences() {
-        remotePreferences = RemotePreferences(this@MainActivity, "cn.zr.preferences", "other_preferences")
+        //remotePreferences = RemotePreferences(this@MainActivity, "cn.zr.preferences", "other_preferences")
         PreferenceManager.getDefaultSharedPreferences(this).apply {
-            switchSuspensionWindow(getBoolean("suspension_window_check_box", false))
+            switchSuspensionWindow(getBoolean("is_show_suspension_window_key", false))
             registerOnSharedPreferenceChangeListener(this@MainActivity)
         }
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
 
         when (key) {
-            "suspension_window_check_box" -> {
+            "is_show_suspension_window_key" -> {
                 switchSuspensionWindow(sharedPreferences.getBoolean(key, false))
             }
         }
@@ -104,16 +104,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
 
-
+         Switch(this@MainActivity).apply {
+            mainSwitch = this
+            isAccessibility = isStart().apply {
+                isChecked = this
+            }
+            setOnCheckedChangeListener(this@MainActivity)
+        }
         supportActionBar?.apply {
             setDisplayShowCustomEnabled(true)
-            customView = Switch(this@MainActivity).apply {
-                mainSwitch = this
-                isAccessibility = isStart().apply {
-                    isChecked = this
-                }
-                setOnCheckedChangeListener(this@MainActivity)
-            }
+            customView = mainSwitch
         }
 
 
@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         when (requestCode) {
             REQUEST_CODE_DRAW_OVERLAYS_PERMISSION ->
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (Settings.canDrawOverlays(applicationContext)) {
+                    if (!Settings.canDrawOverlays(applicationContext)) {
                         Toast.makeText(this, getString(R.string.no_suspension_windows_permission), Toast.LENGTH_SHORT).show()
                     } else {
                         SuspensionWindow.showSuspensionWindow(this)
