@@ -26,6 +26,8 @@ class TimeQuantumAlertDialog(val context: Context, val preference: Preference, v
     private lateinit var startTime1TV: TextView
     private lateinit var endTimeTV: TextView
     private lateinit var endTime1TV: TextView
+    private lateinit var alertDialog: AlertDialog
+
     private val configManager = ConfigManager.getInstance()
     fun show() {
         val timeQuantum = configManager.useCarTime
@@ -38,7 +40,6 @@ class TimeQuantumAlertDialog(val context: Context, val preference: Preference, v
         val calendar1 = Calendar.getInstance().apply {
             time = timeQuantum.endTime
         }
-
 
         //preferenceManager.sharedPreferences.getString("use_car_time_key", "2018-12-10 12:00" + ConfigUtil.SPLIT_FLAG + "2019-12-10 12:00")
         AlertDialog.Builder(context!!).setTitle(preference.title).setView(LayoutInflater.from(context).inflate(R.layout.view_time_quantum_select, null).apply {
@@ -103,25 +104,31 @@ class TimeQuantumAlertDialog(val context: Context, val preference: Preference, v
                 }
             }
         })
-                .setNegativeButton(context!!.resources.getText(R.string.cancel), null).setPositiveButton(context!!.resources.getText(R.string.confirm), { dialog, which ->
-
-                    val s = "${startTimeTV.text} ${startTime1TV.text}=${endTimeTV.text} ${endTime1TV.text}"
-                    ConfigUtil.parseTimeQuantum(s).also {
-                        if (it != null) {
-
-                            if (it.startTime > it.endTime) {
-                                Toast.makeText(context, context.getString(R.string.the_start_time_cannot_be_greater_than_the_end_time), Toast.LENGTH_SHORT).show()
-                            } else {
-                                configManager.useCarTime = it
-                                prefsFragment.preferenceManager.sharedPreferences.edit().apply {
-                                    putString(preference.key, s)
-                                }.apply()
-                                Toast.makeText(context, context.getString(R.string.save_success), Toast.LENGTH_SHORT).show()
-                            }
-                        }
+                .setNegativeButton(context!!.resources.getText(R.string.cancel), null).setPositiveButton(context!!.resources.getText(R.string.confirm), null).apply {
+                    create().apply {
+                        alertDialog = this
+                        show()
                     }
+                }
 
 
-                }).show()
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val s = "${startTimeTV.text} ${startTime1TV.text}=${endTimeTV.text} ${endTime1TV.text}"
+            ConfigUtil.parseTimeQuantum(s).also {
+                if (it != null) {
+
+                    if (it.startTime > it.endTime) {
+                        Toast.makeText(context, context.getString(R.string.the_start_time_cannot_be_greater_than_the_end_time), Toast.LENGTH_SHORT).show()
+                    } else {
+                        configManager.useCarTime = it
+                        prefsFragment.preferenceManager.sharedPreferences.edit().apply {
+                            putString(preference.key, s)
+                        }.apply()
+                        alertDialog.dismiss()
+                        Toast.makeText(context, context.getString(R.string.save_success), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 }

@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
 
-         Switch(this@MainActivity).apply {
+        Switch(this@MainActivity).apply {
             mainSwitch = this
             isAccessibility = isStart().apply {
                 isChecked = this
