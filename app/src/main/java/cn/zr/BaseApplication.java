@@ -14,6 +14,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG,"onCreate()");
+        ConfigManager.Companion.init(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = "1";
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

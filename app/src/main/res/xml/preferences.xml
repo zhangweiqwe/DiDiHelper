@@ -3,37 +3,71 @@
     android:title="@string/app_name">
 
 
+    <PreferenceCategory
+        android:title="@string/time">
+
+        <EditTextPreference
+            android:widgetLayout="@layout/kk"
+            android:key="use_car_time_key"
+            android:title="@string/use_car_time" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/distance">
+
+        <EditTextPreference
+            android:key="i_distance_users_key"
+            android:title="@string/i_distance_users" />
+        <ListPreference
+            android:entries="@array/i_distance_users_entries"
+            android:entryValues="@array/i_distance_users_entryValues"
+            android:key="i_distance_users_sate_key"
+            android:summary="@string/sate"></ListPreference>
+
+        <EditTextPreference
+            android:key="users_distance_destination_key"
+            android:title="@string/user_distance_destination" />
+        <ListPreference
+            android:entries="@array/user_distance_destination_entries"
+            android:entryValues="@array/user_distance_destination_entryValues"
+            android:key="user_distance_destination_state_key"
+            android:summary="@string/sate"></ListPreference>
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="@string/keywords">
 
 
 
+        <EditTextPreference
+            android:key="the_starting_point_keywords_key"
+            android:title="@string/the_starting_point"/>
+
+        <ListPreference
+            android:entries="@array/the_starting_point_key_entries"
+            android:entryValues="@array/the_starting_point_key_entryValues"
+            android:key="the_starting_point_state_key"
+            android:summary="@string/sate"></ListPreference>
+
+        <EditTextPreference
+            android:key="destination_keywords_key"
+            android:title="@string/destination"/>
+        <ListPreference
+            android:entries="@array/destination_entries"
+            android:entryValues="@array/destination_entryValues"
+            android:key="destination_state_key"
+            android:summary="@string/sate"></ListPreference>
+
+
+    </PreferenceCategory>
 
 
 
-
+    <PreferenceCategory android:title="@string/other">
         <CheckBoxPreference
-            android:key="suspension_window_check_box"
+            android:key="is_show_suspension_window_key"
             android:summary="@string/suspension_windows" />
-
-
-
-                <EditTextPreference
-                    android:icon="@android:drawable/ic_menu_edit"
-                    android:key="keywords"
-                    android:title="@string/keywords"
-                    android:summary="@string/use_space_segmentation"
-                    android:dialogTitle="@string/keywords" />
-
-
-
-
-
-
-
-
-
-
-
-
+    </PreferenceCategory>
 
 
 </PreferenceScreen>

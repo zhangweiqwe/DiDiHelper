@@ -7,15 +7,68 @@
 
     <string name="keywords">关键字</string>
     <string name="use_space_segmentation">使用空格分割</string>
+    <string name="distance">距离</string>
+    <string name="user_distance">用户距离</string>
+    <string name="the_starting_point">出发点</string>
 
 
+    <string name="senior">高级</string>
+    <string name="rule">规则</string>
+    <string name="sate">状态</string>
+    <string name="auto_close">自动关闭</string>
+    <string name="time">时间</string>
+    <string name="use_car_time">用车时间</string>
+    <string name="i_distance_users">我距离用户</string>
+    <string name="user_distance_destination">用户距离终点</string>
+    <string name="destination">终点</string>
+    <string name="other">其他</string>
+    <string name="format_error">格式错误</string>
+
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="save_success">保存成功</string>
+    <string name="the_start_time_cannot_be_greater_than_the_end_time">开始时间不能大于结束时间</string>
 
 
-    <array name="arr">
-        <item>sfasdf0</item>
-        <item>sfasdf1</item>
-        <item>sfasdf2</item>
-        <item>sfasdf3</item>
-        <item>sfasdf4</item>
+    <array name="i_distance_users_entries">
+        <item>匹配</item>
+        <item>关闭</item>
     </array>
+    <string-array name="i_distance_users_entryValues">
+        <item>0</item>
+        <item>1</item>
+
+    </string-array>
+
+    <array name="user_distance_destination_entries">
+        <item>匹配</item>
+        <item>关闭</item>
+    </array>
+    <string-array name="user_distance_destination_entryValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+
+    <array name="the_starting_point_key_entries">
+        <item>匹配</item>
+        <item>排除</item>
+        <item>关闭</item>
+    </array>
+    <string-array name="the_starting_point_key_entryValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <array name="destination_entries">
+        <item>匹配</item>
+        <item>排除</item>
+        <item>关闭</item>
+    </array>
+    <string-array name="destination_entryValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>
