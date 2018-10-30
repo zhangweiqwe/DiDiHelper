@@ -11,41 +11,37 @@ class ConfigUtil {
     companion object {
 
         const val SPLIT_FLAG = "="
+        const val SPLIT_FLAG_BLANK_SPACE = " "
         const val SIMPLE_DATA_FORMAT = "yyyy-MM-dd HH:mm"
 
 
-        private fun getKeywords(context: Context): ArrayList<String>? {
-            return PreferenceManager.getDefaultSharedPreferences(context).let {
-                it.getString("keywords", null)
-            }?.let {
-                it.split(" ")?.let {
-                    ArrayList<String>().apply {
+        fun getKeywords(string: String?): ArrayList<String>? {
 
-                        for (i in it) {
-                            if (i.isNotEmpty()) {
-                                add(i)
+            string?.trim()?.also {
+                if (it.contains(SPLIT_FLAG_BLANK_SPACE)) {
+                    it.split(SPLIT_FLAG_BLANK_SPACE).let {
+                        return ArrayList<String>().apply {
+                            for (i in it) {
+                                i.trim().also {
+                                    if (it.isNotEmpty()) {
+                                        add(it)
+                                    }
+                                }
+
                             }
                         }
+
                     }
-
+                } else {
+                    if (it.isNotEmpty()) {
+                        return arrayListOf(it)
+                    }
                 }
 
-
             }
+            return null
         }
 
-
-        fun checkKeywords(context: Context, string: String?): Boolean {
-            if (string == null) {
-                return false
-            }
-            getKeywords(context)?.forEach {
-                if (string.contains(it)) {
-                    return true
-                }
-            }
-            return false
-        }
 
         fun parseTimeQuantum(timeQuantumStr: String): TimeQuantum? {
             timeQuantumStr.split(SPLIT_FLAG).also {

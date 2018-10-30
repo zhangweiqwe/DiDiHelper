@@ -35,43 +35,12 @@ adb pull /data/local/tmp/app.uix d:/tmp/app.uix
 adb pull /data/local/tmp/app.png d:/tmp/app.png
  *
  */
-class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener, AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
+class MainActivity : AppCompatActivity(),  AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
 
-    //private lateinit var remotePreferences: RemotePreferences
-    private fun initPreferences() {
-        //remotePreferences = RemotePreferences(this@MainActivity, "cn.zr.preferences", "other_preferences")
-        PreferenceManager.getDefaultSharedPreferences(this).apply {
-            switchSuspensionWindow(getBoolean("is_show_suspension_window_key", false))
-            registerOnSharedPreferenceChangeListener(this@MainActivity)
-        }
 
-    }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
 
-        when (key) {
-            "is_show_suspension_window_key" -> {
-                switchSuspensionWindow(sharedPreferences.getBoolean(key, false))
-            }
-        }
 
-    }
-
-    private fun switchSuspensionWindow(b: Boolean) {
-        if (b) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (!Settings.canDrawOverlays(applicationContext)) {
-                    startActivityForResult(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), REQUEST_CODE_DRAW_OVERLAYS_PERMISSION)
-                } else {
-                    SuspensionWindow.showSuspensionWindow(this)
-                }
-            } else {
-                SuspensionWindow.showSuspensionWindow(this)
-            }
-        } else {
-            SuspensionWindow.dismissSuspensionWindow()
-        }
-    }
 
     private lateinit var mainSwitch: Switch
 
@@ -79,15 +48,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private var isAccessibility: Boolean = false
 
 
-    private fun getResult(): String {
-        return "zrd"
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        getResult()
         Log.d(TAG, "onCreate")
 
         //Other().equals("")
@@ -126,7 +90,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
 
-        initPreferences()
 
     }
 
@@ -140,11 +103,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this)
-    }
-
 
     override fun onResume() {
         super.onResume()
@@ -153,16 +111,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             isChecked = isAccessibility
             setOnCheckedChangeListener(this@MainActivity)
         }
-
         isStart()
     }
 
     private fun isStart(): Boolean {
-
-
         Log.d(TAG, "isStart")
         accessibilityManager.apply {
-
             Log.d(TAG, "-->" + this.hashCode())
         }.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC)?.also {
             for (i in it) {
@@ -181,28 +135,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_DRAW_OVERLAYS_PERMISSION ->
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (!Settings.canDrawOverlays(applicationContext)) {
-                        Toast.makeText(this, getString(R.string.no_suspension_windows_permission), Toast.LENGTH_SHORT).show()
-                    } else {
-                        SuspensionWindow.showSuspensionWindow(this)
-                    }
-                }
-        }
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        return super.onKeyDown(keyCode, event)
-    }
 
     companion object {
         private const val TAG = "MainActivity"
-        private const val REQUEST_CODE_DRAW_OVERLAYS_PERMISSION = 1000
-
     }
 
 

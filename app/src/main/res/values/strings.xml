@@ -6,7 +6,7 @@
     <string name="suspension_windows">悬浮窗</string>
 
     <string name="keywords">关键字</string>
-    <string name="use_space_segmentation">使用空格分割</string>
+    <string name="use_spaces_to_separate">使用空格隔开</string>
     <string name="distance">距离</string>
     <string name="user_distance">用户距离</string>
     <string name="the_starting_point">出发点</string>
@@ -29,14 +29,24 @@
     <string name="save_success">保存成功</string>
     <string name="the_start_time_cannot_be_greater_than_the_end_time">开始时间不能大于结束时间</string>
 
+    <string name="unit_meter">单位米</string>
 
     <array name="i_distance_users_entries">
         <item>匹配</item>
         <item>关闭</item>
     </array>
     <string-array name="i_distance_users_entryValues">
-        <item>0</item>
         <item>1</item>
+        <item>0</item>
+    </string-array>
+
+    <array name="use_car_time_entries">
+        <item>匹配</item>
+        <item>关闭</item>
+    </array>
+    <string-array name="use_car_time_entryValues">
+        <item>1</item>
+        <item>0</item>
 
     </string-array>
 
@@ -45,8 +55,8 @@
         <item>关闭</item>
     </array>
     <string-array name="user_distance_destination_entryValues">
-        <item>0</item>
         <item>1</item>
+        <item>0</item>
     </string-array>
 
 
@@ -56,9 +66,9 @@
         <item>关闭</item>
     </array>
     <string-array name="the_starting_point_key_entryValues">
-        <item>0</item>
-        <item>1</item>
         <item>2</item>
+        <item>1</item>
+        <item>0</item>
     </string-array>
 
     <array name="destination_entries">
@@ -67,8 +77,8 @@
         <item>关闭</item>
     </array>
     <string-array name="destination_entryValues">
-        <item>0</item>
-        <item>1</item>
         <item>2</item>
+        <item>1</item>
+        <item>0</item>
     </string-array>
 </resources>
