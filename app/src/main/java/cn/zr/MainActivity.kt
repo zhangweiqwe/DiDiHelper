@@ -14,6 +14,7 @@ import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.preference.PreferenceManager
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityManager
@@ -35,11 +36,7 @@ adb pull /data/local/tmp/app.uix d:/tmp/app.uix
 adb pull /data/local/tmp/app.png d:/tmp/app.png
  *
  */
-class MainActivity : AppCompatActivity(),  AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
-
-
-
-
+class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
 
 
     private lateinit var mainSwitch: Switch
@@ -48,10 +45,13 @@ class MainActivity : AppCompatActivity(),  AccessibilityManager.AccessibilitySta
     private var isAccessibility: Boolean = false
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+
+
         Log.d(TAG, "onCreate")
 
         //Other().equals("")
@@ -88,7 +88,6 @@ class MainActivity : AppCompatActivity(),  AccessibilityManager.AccessibilitySta
             setDisplayShowCustomEnabled(true)
             customView = mainSwitch
         }
-
 
 
     }
@@ -133,7 +132,6 @@ class MainActivity : AppCompatActivity(),  AccessibilityManager.AccessibilitySta
 
         return false
     }
-
 
 
     companion object {

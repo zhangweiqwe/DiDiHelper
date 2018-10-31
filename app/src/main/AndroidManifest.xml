@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.zr">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- 显示系统窗口权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- 在 屏幕最顶部显示addview-->
@@ -8,14 +11,15 @@
 
 
     <application
+        android:name=".BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".BaseApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +31,8 @@
         <provider
             android:name=".contentProviderPreference.MyPreferenceProvider"
             android:authorities="cn.zr.preferences"
-            android:exported="true"/>
+            android:directBootAware="true"
+            android:exported="true" />
         <service
             android:name=".MyAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
@@ -38,8 +43,6 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessible_service_config" />
         </service>
-
-
 
 
         <!-- 是否是xposed模块，xposed根据这个来判断是否是模块 -->

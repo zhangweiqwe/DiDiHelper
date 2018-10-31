@@ -28,6 +28,7 @@
     <string name="cancel">取消</string>
     <string name="save_success">保存成功</string>
     <string name="the_start_time_cannot_be_greater_than_the_end_time">开始时间不能大于结束时间</string>
+    <string name="please_open_the_network_and_try_again">请打开网络后重试</string>
 
     <string name="unit_meter">单位米</string>
 
