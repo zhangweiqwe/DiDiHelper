@@ -117,7 +117,7 @@ class TimeQuantumAlertDialog(val context: Context, val preference: Preference, v
             ConfigUtil.parseTimeQuantum(s).also {
                 if (it != null) {
 
-                    if (it.startTime > it.endTime) {
+                    if (it.startTime.time > it.endTime.time) {
                         Toast.makeText(context, context.getString(R.string.the_start_time_cannot_be_greater_than_the_end_time), Toast.LENGTH_SHORT).show()
                     } else {
                         configManager.useCarTime = it

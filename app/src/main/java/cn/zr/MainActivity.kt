@@ -21,6 +21,7 @@ import android.view.accessibility.AccessibilityManager
 import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.Toast
+import cn.zr.contentProviderPreference.RemotePreferenceAccessException
 import cn.zr.contentProviderPreference.RemotePreferences
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -48,7 +49,9 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val prefs = RemotePreferences(this, "cn.zr.preferences", "main_prefs")
+        //val prefs = RemotePreferences(this.createDeviceProtectedStorageContext(), "cn.zr.preferences", "main_prefs")
+        prefs.edit().putString("key", "123").apply()
 
 
 

@@ -1,6 +1,11 @@
-package cn.zr.contentProviderPreference;
+package com.android.server.accessibility.remotePreferences;
 
-import android.content.*;
+import android.content.ContentProvider;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.UriMatcher;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
