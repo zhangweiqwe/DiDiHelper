@@ -166,7 +166,6 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
         }
         isStart()
 
-        Other.z(this)
 
     }
 
