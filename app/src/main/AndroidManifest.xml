@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- 在 屏幕最顶部显示addview-->
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
-
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".BaseApplication"
@@ -44,6 +44,14 @@
                 android:resource="@xml/accessible_service_config" />
         </service>
 
+
+        <receiver android:name=".MyBroadcastReceiver">
+            <intent-filter>
+                <action android:name="fdasfsadf"></action>
+                <!--<action android:name="android.intent.action.ACCESSIBILITY_MANAGER_SERVICE_HELPER"/>-->
+                <!--<category android:name="android.intent.category.CHECK_TIME"/>-->
+            </intent-filter>
+        </receiver>
 
         <!-- 是否是xposed模块，xposed根据这个来判断是否是模块 -->
         <meta-data

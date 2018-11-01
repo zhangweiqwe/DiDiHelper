@@ -2,6 +2,7 @@ package cn.zr
 
 import android.Manifest
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -26,6 +27,7 @@ import cn.zr.contentProviderPreference.RemotePreferences
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.lang.reflect.Modifier
+import java.security.GeneralSecurityException
 
 
 /**
@@ -45,13 +47,62 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
     private lateinit var accessibilityManager: AccessibilityManager
     private var isAccessibility: Boolean = false
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_CODE_PERMISSION_READ_PHONE_STATE -> {
+                grantResults.also {
+                    if (!it.isEmpty() && it[0] == PackageManager.PERMISSION_GRANTED) {
+                        saveTag()
+                    } else {
+                        finish()
+                    }
+                }
+            }
+        }
+    }
+
+
+    @SuppressLint("MissingPermission")
+    private fun saveTag() {
+        val prefs = RemotePreferences(this, "cn.zr.preferences", "main_prefs")
+        prefs.getString("key", null).also {
+            if (it != null && it.isNotEmpty()) {
+                return
+            }
+        }
+        val telephonyManager = (getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val password = "password"
+            val message = "${telephonyManager.imei}---2018-7-10 12:00=2018-12-22 12:00---cn.mm"
+            try {
+                val encryptedMsg = AESCrypt.encrypt(password, message)
+                prefs.edit().putString("key", encryptedMsg).apply()
+            } catch (e: GeneralSecurityException) {
+                e.printStackTrace()
+                //handle error
+            }
+        }
+
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val prefs = RemotePreferences(this, "cn.zr.preferences", "main_prefs")
-        //val prefs = RemotePreferences(this.createDeviceProtectedStorageContext(), "cn.zr.preferences", "main_prefs")
-        prefs.edit().putString("key", "123").apply()
+
+
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            saveTag()
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_CODE_PERMISSION_READ_PHONE_STATE)
+            } else {
+                finish()
+            }
+        }
 
 
 
@@ -114,6 +165,9 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
             setOnCheckedChangeListener(this@MainActivity)
         }
         isStart()
+
+        Other.z(this)
+
     }
 
     private fun isStart(): Boolean {
@@ -125,7 +179,7 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
                 Log.d(TAG, "-->")
                 Log.d(TAG, "-->" + i.id + "  " + i.packageNames[0])
                 if (i.id == "$packageName/.MyAccessibilityService") {
-                    Toast.makeText(this@MainActivity, i.packageNames[0], Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, i.packageNames[2], Toast.LENGTH_SHORT).show()
                     return true
                 }
 
@@ -139,6 +193,7 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
 
     companion object {
         private const val TAG = "MainActivity"
+        private const val REQUEST_CODE_PERMISSION_READ_PHONE_STATE = 1001
     }
 
 

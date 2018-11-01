@@ -1,8 +1,11 @@
 package cn.zr;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import java.io.File;
+import java.util.Date;
 
 import de.robv.android.xposed.XposedBridge;
 
@@ -25,5 +28,20 @@ public class Other {
             }
         }
         return null;
+    }
+
+
+    public static final void z(Context context){
+        Date[] dates = new Date[2];
+        dates[0] = new Date();
+        dates[1] = new Date();
+
+        Intent intent = new Intent();
+        intent.setAction("fdasfsadf");
+        //Intent intent = new Intent("android.intent.action.ACCESSIBILITY_MANAGER_SERVICE_HELPER");
+//        intent.addCategory("android.intent.category.CHECK_TIME");
+        intent.putExtra("startTime", dates[0].getTime());
+        intent.putExtra("endTime", dates[1].getTime());
+        context.sendBroadcast(intent);
     }
 }
