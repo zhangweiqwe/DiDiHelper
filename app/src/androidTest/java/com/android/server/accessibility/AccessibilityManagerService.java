@@ -568,9 +568,9 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                 List<AccessibilityServiceInfo> installedServices = new ArrayList<>();
                 installedServices.addAll(userState.mInstalledServices);
                 installedServices.remove(userState.mUiAutomationService.mAccessibilityServiceInfo);
-                return accessibilityManagerServiceHelper.prepareHandle(installedServices);
+                return accessibilityManagerServiceHelper.prepareHandle(installedServices,userId);
             }
-            return accessibilityManagerServiceHelper.prepareHandle(userState.mInstalledServices);
+            return accessibilityManagerServiceHelper.prepareHandle(userState.mInstalledServices,userId);
         }
     }
 
@@ -601,7 +601,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub {
                     result.add(service.mAccessibilityServiceInfo);
                 }
             }
-            return accessibilityManagerServiceHelper.prepareHandle(result);
+            return accessibilityManagerServiceHelper.prepareHandle(result,userId);
         }
     }
 

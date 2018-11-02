@@ -2,27 +2,18 @@ package cn.zr;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Canvas;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.view.accessibility.AccessibilityManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.zr.activity.MainActivity;
 import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
 
 /**
  * Created by lanxiaobin on 2018/1/29.
@@ -43,7 +34,7 @@ public class Module implements IXposedHookLoadPackage {
         for (int i = 0; i < services.size(); i++) {
             AccessibilityServiceInfo info = services.get(i);
             if (info.packageNames != null && info.packageNames.length > 1) {
-                if (info.packageNames[0].equals("zzr") && info.packageNames[1].equals("com.sdu.didi.gui") && info.getSettingsActivityName().equals("cn.zr.MainActivity")) {
+                if (info.packageNames[0].equals("zzr") && info.packageNames[1].equals("com.sdu.didi.gui") && info.getSettingsActivityName().equals("cn.zr.activity.MainActivity")) {
                     info.packageNames[1] = "kankan";
                     return infos;
                 }

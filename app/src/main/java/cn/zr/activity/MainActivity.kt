@@ -1,32 +1,26 @@
-package cn.zr
+package cn.zr.activity
 
 import android.Manifest
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v7.preference.PreferenceManager
 import android.telephony.TelephonyManager
 import android.util.Log
-import android.view.KeyEvent
 import android.view.accessibility.AccessibilityManager
 import android.widget.CompoundButton
 import android.widget.Switch
 import android.widget.Toast
-import cn.zr.contentProviderPreference.RemotePreferenceAccessException
+import cn.zr.AESCrypt
+import cn.zr.CheckUtil
+import cn.zr.Other
+import cn.zr.R
 import cn.zr.contentProviderPreference.RemotePreferences
-import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
-import java.lang.reflect.Modifier
 import java.security.GeneralSecurityException
 
 
@@ -39,7 +33,7 @@ adb pull /data/local/tmp/app.uix d:/tmp/app.uix
 adb pull /data/local/tmp/app.png d:/tmp/app.png
  *
  */
-class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
+class MainActivity : BaseAppCompatActivity(), AccessibilityManager.AccessibilityStateChangeListener, CompoundButton.OnCheckedChangeListener {
 
 
     private lateinit var mainSwitch: Switch
@@ -47,7 +41,7 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
     private lateinit var accessibilityManager: AccessibilityManager
     private var isAccessibility: Boolean = false
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    /*override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_CODE_PERMISSION_READ_PHONE_STATE -> {
@@ -61,28 +55,23 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
             }
         }
     }
+*/
 
-
-    @SuppressLint("MissingPermission")
-    private fun saveTag() {
+    private fun saveKey() {
         val prefs = RemotePreferences(this, "cn.zr.preferences", "main_prefs")
-        prefs.getString("key", null).also {
-            if (it != null && it.isNotEmpty()) {
+        prefs.getString("key", null)?.also {
+            if ( it.isNotEmpty()) {
                 return
             }
         }
-        val telephonyManager = (getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            val password = "password"
-            val message = "${telephonyManager.imei}---2018-7-10 12:00=2018-12-22 12:00---cn.mm"
-            try {
-                val encryptedMsg = AESCrypt.encrypt(password, message)
-                prefs.edit().putString("key", encryptedMsg).apply()
-            } catch (e: GeneralSecurityException) {
-                e.printStackTrace()
-                //handle error
-            }
+        val password = "password"
+        val message = "2018-7-10 12:00=2018-12-22 12:00"
+        try {
+            val encryptedMsg = AESCrypt.encrypt(password, message)
+            prefs.edit().putString("key", encryptedMsg).apply()
+        } catch (e: GeneralSecurityException) {
+            e.printStackTrace()
+            //handle error
         }
 
 
@@ -94,7 +83,12 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
 
 
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+
+        Other().getCallerProcessName(this)
+
+        saveKey()
+
+        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             saveTag()
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -102,7 +96,8 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
             } else {
                 finish()
             }
-        }
+        }*/
+
 
 
 
@@ -164,9 +159,6 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
             isChecked = isAccessibility
             setOnCheckedChangeListener(this@MainActivity)
         }
-        isStart()
-
-
     }
 
     private fun isStart(): Boolean {
@@ -178,13 +170,15 @@ class MainActivity : AppCompatActivity(), AccessibilityManager.AccessibilityStat
                 Log.d(TAG, "-->")
                 Log.d(TAG, "-->" + i.id + "  " + i.packageNames[0])
                 if (i.id == "$packageName/.MyAccessibilityService") {
-                    Toast.makeText(this@MainActivity, i.packageNames[2], Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this@MainActivity, i.packageNames[2], Toast.LENGTH_SHORT).show()
                     return true
                 }
 
             }
 
         }
+
+
 
         return false
     }

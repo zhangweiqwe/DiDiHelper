@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
@@ -22,6 +23,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityManager
 import android.widget.*
 import cn.zr.preferens.DistanceAlertDialog
 import cn.zr.preferens.TimeQuantumAlertDialog
@@ -35,7 +37,6 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
         private const val REQUEST_CODE_DRAW_OVERLAYS_PERMISSION = 1000
 
     }
-
 
 
     override fun onDestroyView() {
@@ -57,6 +58,35 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
     override fun onCreatePreferences(p0: Bundle?, p1: String?) {
         configManager = ConfigManager.getInstance();
         setPreferencesFromResource(R.xml.preferences, p1)
+        initSate("use_car_time_sate_key")
+
+        initSate("i_distance_users_sate_key")
+        initSate("user_distance_destination_state_key")
+
+        initSate("the_starting_point_state_key")
+        initSate("destination_state_key")
+
+    }
+
+    private fun initSate(sateKey: String) {
+        (findPreference(sateKey) as ListPreference).apply {
+            val value = preferenceManager.sharedPreferences.getString(sateKey, "0")
+            entryValues.forEachIndexed { index, charSequence ->
+                if (charSequence == value) {
+                    summary = entries[index]
+                    return@forEachIndexed
+                }
+            }
+            setOnPreferenceChangeListener { preference, any ->
+                entryValues.forEachIndexed { index, charSequence ->
+                    if (charSequence == any) {
+                        summary = entries[index]
+                        return@forEachIndexed
+                    }
+                }
+                true
+            }
+        }
     }
 
 
@@ -78,7 +108,9 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
             }
         }
     }
+
     override fun onSharedPreferenceChanged(p0: SharedPreferences, p1: String) {
+        Log.d(TAG,"onSharedPreferenceChanged:$p1")
         when (p1) {
             "is_show_suspension_window_key" -> {
                 switchSuspensionWindow(p0.getBoolean(p1, false).apply {
@@ -103,6 +135,9 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
                 configManager.destinationState = p0.getString(p1, "0")
             }
         }
+
+
+
     }
 
     /*override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

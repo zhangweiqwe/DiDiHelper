@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">zr</string>
-    <string name="description">这是什么</string>
+    <string name="description">已启动</string>
     <string name="no_suspension_windows_permission">没有悬浮窗权限</string>
 
     <string name="suspension_windows">悬浮窗</string>
@@ -31,6 +31,14 @@
     <string name="please_open_the_network_and_try_again">请打开网络后重试</string>
 
     <string name="unit_meter">单位米</string>
+
+
+    <string name="valid_time">有效时间</string>
+   <string name="validation_failed_please_try_again_after_you_open_the_network">验证失败，请打开网络后重试</string>
+    <string name="authentication_is_successful">验证成功</string>
+    <string name="authentication_is_failure">验证失败</string>
+    <string name="please_enter_the_registration_code">请输入注册码</string>
+    <string name="registration_code">注册码</string>
 
     <array name="i_distance_users_entries">
         <item>匹配</item>

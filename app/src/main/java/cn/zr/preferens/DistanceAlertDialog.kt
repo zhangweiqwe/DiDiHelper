@@ -1,5 +1,6 @@
 package cn.zr.preferens
 
+import android.app.Dialog
 import android.content.Context
 import android.support.v7.app.AlertDialog
 import android.support.v7.preference.Preference
@@ -43,6 +44,7 @@ class DistanceAlertDialog(val context: Context, val preference: Preference, val 
                     alertDialog = this
                 }.show()
 
+        requestInputMethod(alertDialog)
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             editText.text.toString().trim().also {
                 if (it.isEmpty()) {
@@ -65,4 +67,10 @@ class DistanceAlertDialog(val context: Context, val preference: Preference, val 
             }
         }
     }
+
+
+    private fun requestInputMethod(dialog: Dialog) {
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+    }
+
 }

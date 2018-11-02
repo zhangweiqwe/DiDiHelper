@@ -2,17 +2,14 @@ package cn.zr;
 
 import android.accessibilityservice.AccessibilityService;
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import java.util.List;
+import cn.zr.activity.MainActivity;
 
 public class MyAccessibilityService extends AccessibilityService {
     private static final String TAG = "MyAccessibilityService";
@@ -20,6 +17,10 @@ public class MyAccessibilityService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
         Log.d(TAG, "onAccessibilityEvent" + accessibilityEvent.getEventType());
+
+        if(!isTheValidTime){
+            return;
+        }
 
         switch (accessibilityEvent.getEventType()) {
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
@@ -29,7 +30,7 @@ public class MyAccessibilityService extends AccessibilityService {
                 break;
 
             case AccessibilityEvent.TYPE_ANNOUNCEMENT:
-                Log.d(TAG,"AccessibilityEvent.TYPE_ANNOUNCEMENT "+accessibilityEvent.getText());
+                Log.d(TAG, "AccessibilityEvent.TYPE_ANNOUNCEMENT " + accessibilityEvent.getText());
                 break;
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
                 Log.d(TAG, accessibilityEvent.getClassName().toString());
@@ -120,15 +121,22 @@ public class MyAccessibilityService extends AccessibilityService {
     public void onInterrupt() {
         Log.d(TAG, "onInterrupt()");
     }
-
+    private boolean isTheValidTime = false;
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            /*NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Log.d(TAG, "onCreate()");
+        new CheckUtil(this, new CheckUtil.OnCheckTimeResultListener() {
+            @Override
+            public void onResult(boolean b) {
+                isTheValidTime = b;
+            }
+        }).checkTime();
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            *//*NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel notificationChannel = new NotificationChannel(channelId, getString(R.string.app_name), NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setDescription(getString(R.string.description));
-            mNotificationManager.createNotificationChannel(notificationChannel);*/
+            mNotificationManager.createNotificationChannel(notificationChannel);*//*
 
 
             Notification.Builder builder = new Notification.Builder(this, "1");
@@ -140,13 +148,13 @@ public class MyAccessibilityService extends AccessibilityService {
             builder.setContentText(getString(R.string.description));
             Notification notification = builder.build();
             startForeground(1, notification);
-        }
+        }*/
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopForeground(true);
+        //stopForeground(true);
     }
 
 

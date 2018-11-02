@@ -12,8 +12,9 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import cn.zr.activity.MainActivity;
 
 /**
  * Created by zhongxiang.huang on 2017/6/23.

@@ -13,12 +13,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        externalNativeBuild {
+        /*externalNativeBuild {
             cmake {
                 cppFlags ""
                 abiFilters  'arm64-v8a'
             }
-        }
+        }*/
     }
     buildTypes {
         release {
@@ -36,11 +36,11 @@ android {
         }
 
     }
-    externalNativeBuild {
+    /*externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
         }
-    }
+    }*/
 }
 
 dependencies {
