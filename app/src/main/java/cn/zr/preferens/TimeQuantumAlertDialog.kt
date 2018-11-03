@@ -124,6 +124,7 @@ class TimeQuantumAlertDialog(val context: Context, val preference: Preference, v
                         prefsFragment.preferenceManager.sharedPreferences.edit().apply {
                             putString(preference.key, s)
                         }.apply()
+                        preference.callChangeListener(null)
                         alertDialog.dismiss()
                         Toast.makeText(context, context.getString(R.string.save_success), Toast.LENGTH_SHORT).show()
                     }

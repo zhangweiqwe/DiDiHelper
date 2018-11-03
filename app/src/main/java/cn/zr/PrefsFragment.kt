@@ -27,6 +27,7 @@ import android.view.accessibility.AccessibilityManager
 import android.widget.*
 import cn.zr.preferens.DistanceAlertDialog
 import cn.zr.preferens.TimeQuantumAlertDialog
+import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -58,26 +59,21 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
     override fun onCreatePreferences(p0: Bundle?, p1: String?) {
         configManager = ConfigManager.getInstance();
         setPreferencesFromResource(R.xml.preferences, p1)
-        initSate("use_car_time_sate_key")
 
-        initSate("i_distance_users_sate_key")
-        initSate("user_distance_destination_state_key")
 
-        initSate("the_starting_point_state_key")
-        initSate("destination_state_key")
-
-    }
-
-    private fun initSate(sateKey: String) {
-        (findPreference(sateKey) as ListPreference).apply {
-            val value = preferenceManager.sharedPreferences.getString(sateKey, "0")
-            entryValues.forEachIndexed { index, charSequence ->
-                if (charSequence == value) {
-                    summary = entries[index]
-                    return@forEachIndexed
-                }
-            }
+        findPreference("use_car_time_key").apply {
             setOnPreferenceChangeListener { preference, any ->
+                configManager.useCarTime.also {
+                    val simpleDateFormat = SimpleDateFormat(ConfigUtil.SIMPLE_DATA_FORMAT)
+                    summary = "${simpleDateFormat.format(it.startTime)} ${getString(R.string.to)} ${simpleDateFormat.format(it.endTime)}"
+                }
+                true
+            }
+            callChangeListener(null)
+        }
+        (findPreference("use_car_time_sate_key") as ListPreference).apply {
+            setOnPreferenceChangeListener { preference, any ->
+                findPreference("use_car_time_key").isEnabled = any != "0"
                 entryValues.forEachIndexed { index, charSequence ->
                     if (charSequence == any) {
                         summary = entries[index]
@@ -86,7 +82,139 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
                 }
                 true
             }
+            callChangeListener(preferenceManager.sharedPreferences.getString(key, "0"))
         }
+
+
+
+
+
+        findPreference("i_distance_users_key").apply {
+            setOnPreferenceChangeListener { preference, any ->
+                summary = "${configManager.iDistanceUsers} ${getString(R.string.kilometer)}"
+                true
+            }
+            callChangeListener(null)
+        }
+        (findPreference("i_distance_users_sate_key") as ListPreference).apply {
+            setOnPreferenceChangeListener { preference, any ->
+                findPreference("i_distance_users_key").isEnabled = any != "0"
+                entryValues.forEachIndexed { index, charSequence ->
+                    if (charSequence == any) {
+                        summary = entries[index]
+                        return@forEachIndexed
+                    }
+                }
+                true
+            }
+            callChangeListener(preferenceManager.sharedPreferences.getString(key, "0"))
+        }
+        findPreference("users_distance_destination_key").apply {
+            setOnPreferenceChangeListener { preference, any ->
+                summary = "${configManager.usersDistanceDestination} ${getString(R.string.kilometer)}"
+                true
+            }
+            callChangeListener(null)
+        }
+        (findPreference("user_distance_destination_state_key") as ListPreference).apply {
+            setOnPreferenceChangeListener { preference, any ->
+                findPreference("users_distance_destination_key").isEnabled = any != "0"
+                entryValues.forEachIndexed { index, charSequence ->
+                    if (charSequence == any) {
+                        summary = entries[index]
+                        return@forEachIndexed
+                    }
+                }
+                true
+            }
+            callChangeListener(preferenceManager.sharedPreferences.getString(key, "0"))
+        }
+
+
+        findPreference("the_starting_point_keywords_key").apply {
+            setOnPreferenceChangeListener { preference, any ->
+                configManager.theStartingPointKeywords.also {
+                    summary = if (it == null || it.isEmpty()) {
+                        null
+                    } else {
+                        val sb = StringBuilder()
+                        it.forEach {
+                            sb.append(it + "\t")
+                        }
+                        sb.toString()
+                    }
+                }
+                true
+            }
+            callChangeListener(null)
+        }
+        (findPreference("the_starting_point_state_key") as ListPreference).apply {
+            setOnPreferenceChangeListener { preference, any ->
+                findPreference("the_starting_point_keywords_key").isEnabled = any != "0"
+                entryValues.forEachIndexed { index, charSequence ->
+                    if (charSequence == any) {
+                        summary = entries[index]
+                        return@forEachIndexed
+                    }
+                }
+                true
+            }
+            callChangeListener(preferenceManager.sharedPreferences.getString(key, "0"))
+        }
+        findPreference("destination_keywords_key").apply {
+            setOnPreferenceChangeListener { preference, any ->
+                configManager.destinationKeywords.also {
+                    summary = if (it == null || it.isEmpty()) {
+                        null
+                    } else {
+                        val sb = StringBuilder()
+                        it.forEach {
+                            sb.append(it + "\t")
+                        }
+                        sb.toString()
+                    }
+                }
+                true
+            }
+            callChangeListener(null)
+        }
+        (findPreference("destination_state_key") as ListPreference).apply {
+            setOnPreferenceChangeListener { preference, any ->
+                findPreference("destination_keywords_key").isEnabled = any != "0"
+                entryValues.forEachIndexed { index, charSequence ->
+                    if (charSequence == any) {
+                        summary = entries[index]
+                        return@forEachIndexed
+                    }
+                }
+                true
+            }
+            callChangeListener(preferenceManager.sharedPreferences.getString(key, "0"))
+        }
+
+
+
+        findPreference("farthest_drive_key").apply {
+            setOnPreferenceChangeListener { preference, any ->
+                summary = "${configManager.farthestDrive} ${getString(R.string.kilometer)}"
+                true
+            }
+            callChangeListener(null)
+        }
+        (findPreference("farthest_drive_sate_key") as ListPreference).apply {
+            setOnPreferenceChangeListener { preference, any ->
+                findPreference("farthest_drive_key").isEnabled = any != "0"
+                entryValues.forEachIndexed { index, charSequence ->
+                    if (charSequence == any) {
+                        summary = entries[index]
+                        return@forEachIndexed
+                    }
+                }
+                true
+            }
+            callChangeListener(preferenceManager.sharedPreferences.getString(key, "0"))
+        }
+
     }
 
 
@@ -99,7 +227,7 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
                 "use_car_time_key" -> {
                     TimeQuantumAlertDialog(context!!, preference, this).show()
                 }
-                "i_distance_users_key", "users_distance_destination_key" -> {
+                "i_distance_users_key", "users_distance_destination_key","farthest_drive_key" -> {
                     DistanceAlertDialog(context!!, preference, this).show()
                 }
                 else -> {
@@ -110,16 +238,18 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
     }
 
     override fun onSharedPreferenceChanged(p0: SharedPreferences, p1: String) {
-        Log.d(TAG,"onSharedPreferenceChanged:$p1")
+        Log.d(TAG, "onSharedPreferenceChanged:$p1")
         when (p1) {
             "is_show_suspension_window_key" -> {
                 switchSuspensionWindow(p0.getBoolean(p1, false).apply {
                     configManager.isShowSuspensionWindow = this
                 })
             }
+
             "use_car_time_sate_key" -> {
                 configManager.useCarTimeSate = p0.getString(p1, "0")
             }
+
 
             "i_distance_users_sate_key" -> {
                 configManager.iDistanceUsersSate = p0.getString(p1, "0")
@@ -128,14 +258,22 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
                 configManager.userDistanceDestinationState = p0.getString(p1, "0")
             }
 
+
+            "the_starting_point_keywords_key" -> {
+                configManager.theStartingPointKeywords = ConfigUtil.getKeywords(p0.getString(p1, null))
+                findPreference(p1).callChangeListener(null)
+            }
             "the_starting_point_state_key" -> {
                 configManager.theStartingPointState = p0.getString(p1, "0")
+            }
+            "destination_keywords_key" -> {
+                configManager.destinationKeywords = ConfigUtil.getKeywords(p0.getString(p1, null))
+                findPreference(p1).callChangeListener(null)
             }
             "destination_state_key" -> {
                 configManager.destinationState = p0.getString(p1, "0")
             }
         }
-
 
 
     }

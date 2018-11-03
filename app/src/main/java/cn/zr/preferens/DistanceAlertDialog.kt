@@ -31,6 +31,9 @@ class DistanceAlertDialog(val context: Context, val preference: Preference, val 
                 "users_distance_destination_key" -> {
                     setText(configManager.usersDistanceDestination.toString())
                 }
+                "farthest_drive_key" -> {
+                    setText(configManager.farthestDriveState.toString())
+                }
             }
             inputType = InputType.TYPE_CLASS_NUMBER
             setFocusable(true);
@@ -53,10 +56,16 @@ class DistanceAlertDialog(val context: Context, val preference: Preference, val 
 
                         when (preference.key) {
                             "i_distance_users_key" -> {
-                                putLong(preference.key, it.toLong().apply { configManager.iDistanceUsers = this })
+                                putString(preference.key, it.apply { configManager.iDistanceUsers = this.toDouble() })
+                                preference.callChangeListener(null)
                             }
                             "users_distance_destination_key" -> {
-                                putLong(preference.key, it.toLong().apply { configManager.usersDistanceDestination = this })
+                                putString(preference.key, it.apply { configManager.usersDistanceDestination = this.toDouble() })
+                                preference.callChangeListener(null)
+                            }
+                            "farthest_drive_key" -> {
+                                putString(preference.key, it.apply { configManager.farthestDrive = this.toDouble() })
+                                preference.callChangeListener(null)
                             }
                         }
 

@@ -6,14 +6,12 @@
 
         <EditTextPreference
             android:key="use_car_time_key"
-            android:title="@string/use_car_time"
-            android:widgetLayout="@layout/kk" />
+            android:title="@string/use_car_time" />
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/use_car_time_entries"
             android:entryValues="@array/use_car_time_entryValues"
-            android:key="use_car_time_sate_key"
-            android:summary="@string/sate"></ListPreference>
+            android:key="use_car_time_sate_key"></ListPreference>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/distance">
@@ -21,23 +19,21 @@
         <EditTextPreference
             android:key="i_distance_users_key"
             android:numeric="decimal"
-            android:title="@string/i_distance_users"/>
+            android:title="@string/i_distance_users" />
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/i_distance_users_entries"
             android:entryValues="@array/i_distance_users_entryValues"
-            android:key="i_distance_users_sate_key"
-            android:summary="@string/sate"></ListPreference>
+            android:key="i_distance_users_sate_key"></ListPreference>
 
         <EditTextPreference
             android:key="users_distance_destination_key"
-            android:title="@string/user_distance_destination"/>
+            android:title="@string/user_distance_destination" />
         <ListPreference
             android:defaultValue="0"
             android:entries="@array/user_distance_destination_entries"
             android:entryValues="@array/user_distance_destination_entryValues"
-            android:key="user_distance_destination_state_key"
-            android:summary="@string/sate"></ListPreference>
+            android:key="user_distance_destination_state_key"></ListPreference>
 
     </PreferenceCategory>
 
@@ -53,8 +49,7 @@
             android:defaultValue="0"
             android:entries="@array/the_starting_point_key_entries"
             android:entryValues="@array/the_starting_point_key_entryValues"
-            android:key="the_starting_point_state_key"
-            android:summary="@string/sate"></ListPreference>
+            android:key="the_starting_point_state_key"></ListPreference>
 
         <EditTextPreference
             android:key="destination_keywords_key"
@@ -63,10 +58,22 @@
             android:defaultValue="0"
             android:entries="@array/destination_entries"
             android:entryValues="@array/destination_entryValues"
-            android:key="destination_state_key"
-            android:summary="@string/sate"></ListPreference>
+            android:key="destination_state_key"></ListPreference>
 
 
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="@string/senior">
+
+        <EditTextPreference
+            android:key="farthest_drive_key"
+            android:title="@string/farthest_drive" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/farthest_drive_entries"
+            android:entryValues="@array/farthest_drive_entryValues"
+            android:key="farthest_drive_sate_key"></ListPreference>
     </PreferenceCategory>
 
 
