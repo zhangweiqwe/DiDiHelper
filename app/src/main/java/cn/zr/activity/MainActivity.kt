@@ -159,6 +159,7 @@ class MainActivity : BaseAppCompatActivity(), AccessibilityManager.Accessibility
             isChecked = isAccessibility
             setOnCheckedChangeListener(this@MainActivity)
         }
+        //isStart()
     }
 
     private fun isStart(): Boolean {
@@ -170,7 +171,7 @@ class MainActivity : BaseAppCompatActivity(), AccessibilityManager.Accessibility
                 Log.d(TAG, "-->")
                 Log.d(TAG, "-->" + i.id + "  " + i.packageNames[0])
                 if (i.id == "$packageName/.MyAccessibilityService") {
-                    //Toast.makeText(this@MainActivity, i.packageNames[2], Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this@MainActivity, i.packageNames[0], Toast.LENGTH_SHORT).show()
                     return true
                 }
 

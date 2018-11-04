@@ -32,7 +32,7 @@ class DistanceAlertDialog(val context: Context, val preference: Preference, val 
                     setText(configManager.usersDistanceDestination.toString())
                 }
                 "farthest_drive_key" -> {
-                    setText(configManager.farthestDriveState.toString())
+                    setText(configManager.farthestDrive.toString())
                 }
             }
             inputType = InputType.TYPE_CLASS_NUMBER
