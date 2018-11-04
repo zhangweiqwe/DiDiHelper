@@ -143,7 +143,6 @@ public class MyAccessibilityService extends AccessibilityService {
                         10s秒
                         3s后开始接单
                         1s后自动关闭
-                        11秒
 
 
                          1s后开始接单
