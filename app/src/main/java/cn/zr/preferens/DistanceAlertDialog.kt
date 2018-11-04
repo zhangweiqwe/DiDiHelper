@@ -35,7 +35,7 @@ class DistanceAlertDialog(val context: Context, val preference: Preference, val 
                     setText(configManager.farthestDrive.toString())
                 }
             }
-            inputType = InputType.TYPE_CLASS_NUMBER
+            inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
             setFocusable(true);
             setFocusableInTouchMode(true);
             requestFocus();
