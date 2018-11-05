@@ -1,5 +1,6 @@
 package cn.zr.contentProviderPreference;
 
+//Outgoing transactions from this process must be FLAG_ONEWAY
 public class MyPreferenceProvider extends RemotePreferenceProvider {
     public MyPreferenceProvider() {
 
