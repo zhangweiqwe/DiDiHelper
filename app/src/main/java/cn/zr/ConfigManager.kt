@@ -22,14 +22,93 @@ class ConfigManager private constructor() {
     var destinationKeywords: ArrayList<String>? = null
     var destinationState: String = "0"
 
-    var farthestDrive: Double = 0.0
-    var farthestDriveState: String = "0"
+    /*var farthestDrive: Double = 0.0
+    var farthestDriveState: String = "0"*/
 
     var isShowSuspensionWindow: Boolean = false
+
+    fun check(accessibilityServiceDiDiBean: AccessibilityServiceDiDiBean): Boolean {
+
+        if (useCarTimeSate != "0") {
+            if (useCarTime.startTime < accessibilityServiceDiDiBean.useCarTime && accessibilityServiceDiDiBean.useCarTime < useCarTime.endTime) {
+
+            } else {
+                return false
+            }
+        }
+
+        if (iDistanceUsersSate != "0") {
+            if (iDistanceUsers > accessibilityServiceDiDiBean.iDistanceUsers) {
+
+            } else {
+                return false
+            }
+        }
+
+        if (userDistanceDestinationState != "0") {
+            if (usersDistanceDestination > accessibilityServiceDiDiBean.usersDistanceDestination) {
+
+            } else {
+                return false
+            }
+        }
+
+
+        kotlin.run {
+            var contains = false
+            theStartingPointKeywords?.forEach {
+                if (accessibilityServiceDiDiBean.theStartingPoint.contains(it)) {
+                    contains = true
+                    return@forEach
+                }
+            }
+            when (theStartingPointState) {
+                "2" -> {
+                    if (!contains) {
+                        return false
+                    }
+                }
+                "1" -> {
+                    if (contains) {
+                        return false
+                    }
+                }
+            }
+        }
+
+        kotlin.run {
+            var contains = false
+            destinationKeywords?.forEach {
+                if (accessibilityServiceDiDiBean.destination.contains(it)) {
+                    contains = true
+                    return@forEach
+                }
+            }
+            when (theStartingPointState) {
+                "2" -> {
+                    if (!contains) {
+                        return false
+                    }
+                }
+                "1" -> {
+                    if (contains) {
+                        return false
+                    }
+                }
+            }
+        }
+
+
+
+
+
+        return true
+    }
 
 
     companion object {
         private val configManager = ConfigManager()
+
 
         fun init(context: Context) {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -49,8 +128,8 @@ class ConfigManager private constructor() {
             configManager.destinationKeywords = ConfigUtil.getKeywords(sharedPreferences.getString("destination_keywords_key", null))
             configManager.destinationState = sharedPreferences.getString("destination_state_key", "0")
 
-            configManager.farthestDrive = sharedPreferences.getString("farthest_drive_key", "0").toDouble()
-            configManager.farthestDriveState = sharedPreferences.getString("farthest_drive_sate_key", "0")
+            /* configManager.farthestDrive = sharedPreferences.getString("farthest_drive_key", "0").toDouble()
+             configManager.farthestDriveState = sharedPreferences.getString("farthest_drive_sate_key", "0")*/
 
 
 

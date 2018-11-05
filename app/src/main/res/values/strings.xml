@@ -93,12 +93,12 @@
     </string-array>
 
 
-    <array name="farthest_drive_entries">
+   <!-- <array name="farthest_drive_entries">
         <item>匹配</item>
         <item>关闭</item>
     </array>
     <string-array name="farthest_drive_entryValues">
         <item>1</item>
         <item>0</item>
-    </string-array>
+    </string-array>-->
 </resources>

@@ -49,7 +49,7 @@ public class SuspensionWindow implements View.OnTouchListener {
     private int width, height;
 
 
-    private static final Handler handler = new Handler(Looper.getMainLooper()) {
+   /* private static final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -57,21 +57,21 @@ public class SuspensionWindow implements View.OnTouchListener {
                 INSTANCE.textView.setText((CharSequence) msg.obj);
             }
         }
-    };
+    };*/
 
-    public static void showMsg(CharSequence charSequence) {
+   /* public static void showMsg(CharSequence charSequence) {
         if (charSequence == null || INSTANCE == null) {
             return;
         }
         Message msg = Message.obtain();
         msg.obj = charSequence;
         handler.sendMessage(msg);
-    }
+    }*/
 
     private TextView textView;
 
     private SuspensionWindow(final Context context) {
-        width = height = DensityUtils.dp2px(context, 180);
+        width = height = DensityUtils.dp2px(context, 46);
 
         Log.d(TAG, "SuspensionWindow(Context context)");
 

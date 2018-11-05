@@ -194,7 +194,7 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
 
 
 
-        findPreference("farthest_drive_key").apply {
+      /*  findPreference("farthest_drive_key").apply {
             setOnPreferenceChangeListener { preference, any ->
                 summary = "${configManager.farthestDrive} ${getString(R.string.kilometer)}"
                 true
@@ -214,7 +214,7 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
             }
             callChangeListener(preferenceManager.sharedPreferences.getString(key, "0"))
         }
-
+*/
     }
 
 
@@ -227,7 +227,8 @@ class PrefsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPref
                 "use_car_time_key" -> {
                     TimeQuantumAlertDialog(context!!, preference, this).show()
                 }
-                "i_distance_users_key", "users_distance_destination_key","farthest_drive_key" -> {
+                "i_distance_users_key", "users_distance_destination_key" -> {
+                //"i_distance_users_key", "users_distance_destination_key","farthest_drive_key" -> {
                     DistanceAlertDialog(context!!, preference, this).show()
                 }
                 else -> {

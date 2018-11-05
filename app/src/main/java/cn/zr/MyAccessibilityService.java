@@ -10,12 +10,16 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import cn.zr.activity.MainActivity;
 
 public class MyAccessibilityService extends AccessibilityService {
     private static final String LOG_TAG = "MyAccessibilityService";
+
+    private ConfigManager configManager = ConfigManager.Companion.getInstance();
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
@@ -39,6 +43,7 @@ public class MyAccessibilityService extends AccessibilityService {
                 Log.d(LOG_TAG, accessibilityEvent.getClassName().toString());
 
                 StringBuilder sb = new StringBuilder();
+                sb.append(new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒").format(new Date()) + "\n");
                 sb.append(accessibilityEvent.getClassName().toString());
                 sb.append("\n");
                 final AccessibilityNodeInfo accessibilityNodeInfo = getRootInActiveWindow();
@@ -76,85 +81,81 @@ public class MyAccessibilityService extends AccessibilityService {
                     if (accessibilityNodeInfoParent != null && accessibilityNodeInfoParent.size() == 1) {
                         CharSequence arr[][] = new CharSequence[3][2];
                         List<AccessibilityNodeInfo> accessibilityNodeInfo0 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/order_card_fragment_key_info_2");
-                        Log.d(LOG_TAG, "" + accessibilityNodeInfo0 == null ? "null" : accessibilityNodeInfo0.size() + "");
+                        //Log.d(LOG_TAG, "" + accessibilityNodeInfo0 == null ? "null" : accessibilityNodeInfo0.size() + "");
                         if (accessibilityNodeInfo0 != null && accessibilityNodeInfo0.size() == 3) {
                             arr[0][1] = accessibilityNodeInfo0.get(0).getText();
                             arr[1][0] = accessibilityNodeInfo0.get(1).getText();
                             arr[2][0] = accessibilityNodeInfo0.get(2).getText();
                         }
                         List<AccessibilityNodeInfo> accessibilityNodeInfo1 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/order_card_fragment_key_info_1");
-                        Log.d(LOG_TAG, "" + accessibilityNodeInfo1 == null ? "null" : accessibilityNodeInfo1.size() + "");
+                        //Log.d(LOG_TAG, "" + accessibilityNodeInfo1 == null ? "null" : accessibilityNodeInfo1.size() + "");
                         if (accessibilityNodeInfo1 != null && accessibilityNodeInfo1.size() == 1) {
                             arr[0][0] = accessibilityNodeInfo1.get(0).getText();
                         }
                         List<AccessibilityNodeInfo> accessibilityNodeInfo2 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/order_card_fragment_key_info_3");
-                        Log.d(LOG_TAG, "" + accessibilityNodeInfo2 == null ? "null" : accessibilityNodeInfo2.size() + "");
+                        //Log.d(LOG_TAG, "" + accessibilityNodeInfo2 == null ? "null" : accessibilityNodeInfo2.size() + "");
                         if (accessibilityNodeInfo2 != null && accessibilityNodeInfo2.size() == 2) {
                             arr[1][1] = accessibilityNodeInfo2.get(0).getText();
                             arr[2][1] = accessibilityNodeInfo2.get(1).getText();
                         }
-                        StringBuilder sb1 = new StringBuilder();
                         for (int i = 0; i < arr.length; i++) {
                             for (int z = 0; z < arr[i].length; z++) {
-                                sb1.append(arr[i][z]);
-                                sb1.append("\t");
+                                sb.append(arr[i][z]);
+                                sb.append("\t");
                             }
-                            sb1.append("\n");
+                            sb.append("\n");
                         }
-                        Log.d(LOG_TAG, sb1.toString());
 
 
                         CharSequence[] arr1 = new CharSequence[2];
                         List<AccessibilityNodeInfo> accessibilityNodeInfo10 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/text_order_card_ordinary_area_address_start");
-                        Log.d(LOG_TAG, "" + accessibilityNodeInfo10 == null ? "null" : accessibilityNodeInfo10.size() + " accessibilityNodeInfo10");
+                        //Log.d(LOG_TAG, "" + accessibilityNodeInfo10 == null ? "null" : accessibilityNodeInfo10.size() + " accessibilityNodeInfo10");
                         if (accessibilityNodeInfo10 != null && accessibilityNodeInfo10.size() == 1) {
                             arr1[0] = accessibilityNodeInfo10.get(0).getText();
                         }
                         List<AccessibilityNodeInfo> accessibilityNodeInfo11 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/text_order_card_ordinary_area_address_end");
-                        Log.d(LOG_TAG, "" + accessibilityNodeInfo11 == null ? "null" : accessibilityNodeInfo11.size() + " accessibilityNodeInfo11");
+                        //Log.d(LOG_TAG, "" + accessibilityNodeInfo11 == null ? "null" : accessibilityNodeInfo11.size() + " accessibilityNodeInfo11");
                         if (accessibilityNodeInfo11 != null && accessibilityNodeInfo11.size() == 1) {
                             arr1[1] = accessibilityNodeInfo11.get(0).getText();
                         }
-                        StringBuilder sb2 = new StringBuilder();
                         for (int i = 0; i < arr1.length; i++) {
-                            sb2.append(arr1[i] + "\t");
-                            sb2.append("\n");
+                            sb.append(arr1[i] + "\t");
+                            sb.append("\n");
                         }
-                        Log.d(LOG_TAG, sb2.toString());
 
 
                         CharSequence[] arr2 = new CharSequence[2];
                         List<AccessibilityNodeInfo> accessibilityNodeInfo20 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/grab_order_btn");
-                        Log.d(LOG_TAG, "" + accessibilityNodeInfo20 == null ? "null" : accessibilityNodeInfo20.size() + " accessibilityNodeInfo20");
+                        //Log.d(LOG_TAG, "" + accessibilityNodeInfo20 == null ? "null" : accessibilityNodeInfo20.size() + " accessibilityNodeInfo20");
                         if (accessibilityNodeInfo20 != null && accessibilityNodeInfo20.size() == 1) {
                             arr2[0] = accessibilityNodeInfo20.get(0).getText();
                         }
                         List<AccessibilityNodeInfo> accessibilityNodeInfo21 = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/grab_order_count_down");
-                        Log.d(LOG_TAG, "" + accessibilityNodeInfo21 == null ? "null" : accessibilityNodeInfo21.size() + " accessibilityNodeInfo21");
+                        //Log.d(LOG_TAG, "" + accessibilityNodeInfo21 == null ? "null" : accessibilityNodeInfo21.size() + " accessibilityNodeInfo21");
                         if (accessibilityNodeInfo21 != null && accessibilityNodeInfo21.size() == 1) {
                             arr2[1] = accessibilityNodeInfo21.get(0).getText();
                         }
-                        StringBuilder sb3 = new StringBuilder();
                         for (int i = 0; i < arr2.length; i++) {
-                            sb3.append(arr2[i] + "\t");
-                            sb3.append("\n");
+                            sb.append(arr2[i] + "\t");
+                            sb.append("\n");
                         }
-                        /*
-                        10s秒
-                        3s后开始接单
-                        1s后自动关闭
 
 
-                         1s后开始接单
-
-
-                         订单已被抢
-                        1s后自动关闭
-                         */
-                        Log.d(LOG_TAG, sb3.toString());
-
-
-                        //closeView(accessibilityNodeInfo);
+                        boolean stateOk = checkState(arr2);
+                        sb.append("stateOk:" + stateOk + "\n");
+                        AccessibilityServiceDiDiBean accessibilityServiceDiDiBean = null;
+                        if (stateOk) {
+                            if (accessibilityServiceDiDiBean != null && configManager.check(accessibilityServiceDiDiBean)) {
+                                sb.append("try grabOrder" + "\n");
+                                grabOrder(accessibilityNodeInfo);
+                            } else {
+                                closeView(accessibilityNodeInfo);
+                                sb.append("try closeView 1" + "\n");
+                            }
+                        } else {
+                            closeView(accessibilityNodeInfo);
+                            sb.append("try closeView 2" + "\n");
+                        }
 
 
                     }
@@ -162,19 +163,43 @@ public class MyAccessibilityService extends AccessibilityService {
                 }
 
 
-                SuspensionWindow.showMsg(sb.toString());
+                sb.append(new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒").format(new Date()) + "\n");
+                //SuspensionWindow.showMsg(sb.toString());
                 Log.d(LOG_TAG, sb.toString());
 
                 break;
-
         }
     }
 
+    /*
+                       10s秒
+                       3s后开始接单
+                       1s后自动关闭
+
+
+                        1s后开始接单
+
+
+                        订单已被抢
+                       1s后自动关闭
+                        */
+    private boolean checkState(CharSequence[] arr) {
+        if (arr == null || arr.length != 2) {
+            return false;
+        }
+        if (arr[0] != null) {
+            if (arr[0].equals("订单已被抢")) {
+            } else if (arr[0].equals("抢单")) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private boolean grabOrder(AccessibilityNodeInfo accessibilityNodeInfo) {
         List<AccessibilityNodeInfo> accessibilityNodeInfos = accessibilityNodeInfo.findAccessibilityNodeInfosByViewId("com.sdu.didi.gsui:id/grab_order_bg");
         if (accessibilityNodeInfos != null && accessibilityNodeInfos.size() == 1) {
-            return accessibilityNodeInfos.get(0).performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK);
+            return accessibilityNodeInfos.get(0).performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
         return false;
     }

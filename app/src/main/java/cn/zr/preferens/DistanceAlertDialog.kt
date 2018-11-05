@@ -31,9 +31,9 @@ class DistanceAlertDialog(val context: Context, val preference: Preference, val 
                 "users_distance_destination_key" -> {
                     setText(configManager.usersDistanceDestination.toString())
                 }
-                "farthest_drive_key" -> {
+               /* "farthest_drive_key" -> {
                     setText(configManager.farthestDrive.toString())
-                }
+                }*/
             }
             inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
             setFocusable(true);
@@ -63,10 +63,10 @@ class DistanceAlertDialog(val context: Context, val preference: Preference, val 
                                 putString(preference.key, it.apply { configManager.usersDistanceDestination = this.toDouble() })
                                 preference.callChangeListener(null)
                             }
-                            "farthest_drive_key" -> {
+                            /*"farthest_drive_key" -> {
                                 putString(preference.key, it.apply { configManager.farthestDrive = this.toDouble() })
                                 preference.callChangeListener(null)
-                            }
+                            }*/
                         }
 
                     }.apply()

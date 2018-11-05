@@ -64,7 +64,7 @@
     </PreferenceCategory>
 
 
-    <PreferenceCategory android:title="@string/senior">
+   <!-- <PreferenceCategory android:title="@string/senior">
 
         <EditTextPreference
             android:key="farthest_drive_key"
@@ -74,7 +74,7 @@
             android:entries="@array/farthest_drive_entries"
             android:entryValues="@array/farthest_drive_entryValues"
             android:key="farthest_drive_sate_key"></ListPreference>
-    </PreferenceCategory>
+    </PreferenceCategory>-->
 
 
     <PreferenceCategory android:title="@string/other">
