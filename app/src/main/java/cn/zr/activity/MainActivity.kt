@@ -254,7 +254,7 @@ class MainActivity : BaseAppCompatActivity(), AccessibilityManager.Accessibility
                 return
             }
         }
-        val message = "2018-11-7 16:09=2018-11-20 16:09=${Util.getDevicesTag(this)}"
+        val message = "2018-11-7 16:09=2019-11-20 16:09=${Util.getDevicesTag(this)}"
         var encryptedMsg:String? = null
         try {
             encryptedMsg  = AESCrypt.encrypt("_kankanRoot", message)
