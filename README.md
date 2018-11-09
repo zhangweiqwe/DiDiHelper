@@ -19,7 +19,7 @@ Android滴滴无障碍服务
 如何编译进行测试？
 </br>
 
-1.Android Studio 3.2.1 直接导入
+1.Android Studio 3.2.1 导入编译apk
 </br>
 2.编译lineageos系统，将修改的android系统源码放置到android/framework/base/..里对应的文件夹，具体看packagename (找不到请根据文件名在framework中搜索)
 </br>
