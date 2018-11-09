@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">丢丢助手</string>
+    <string name="app_name">滴滴辅助</string>
     <string name="description">已启动</string>
     <string name="no_suspension_windows_permission">没有悬浮窗权限</string>
 
