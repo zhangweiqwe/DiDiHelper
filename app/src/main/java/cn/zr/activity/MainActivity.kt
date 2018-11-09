@@ -163,8 +163,8 @@ class MainActivity : BaseAppCompatActivity(), AccessibilityManager.Accessibility
                 LLog.shareLog(this)
             }
             R.id.nav_credit_card -> {
-                var s:String? = null
-                s!!.toInt()
+               /* var s:String? = null
+                s!!.toInt()*/
                /* try {
                     s!!.toInt()
                 }catch (e:Exception){
