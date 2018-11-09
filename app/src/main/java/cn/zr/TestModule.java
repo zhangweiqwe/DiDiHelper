@@ -34,7 +34,7 @@ public class TestModule implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         Context systemContext = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", lpparam.classLoader), "currentActivityThread"), "getSystemContext");
-        SharedPreferences prefs = new RemotePreferences(systemContext, "cn.zr.preferences", "other_preferences");
+        SharedPreferences prefs = new RemotePreferences(systemContext, "cn.zr.preferences_didi", "other_preferences");
 
         print(lpparam.packageName + " " + systemContext.getPackageManager().getPackageInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_ACTIVITIES).versionCode + "");
         String packageSourceDir;

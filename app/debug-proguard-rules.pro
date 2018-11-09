@@ -24,4 +24,5 @@
 -keep class cn.zr.Module {*;}
 
 
-
+-dontwarn android.support.v7.widget.**
+-keep class android.support.v7.widget.** {*;}

@@ -1,4 +1,4 @@
-package cn.zr;
+package cn.zr.util;
 
 import android.util.Log;
 

@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,6 +44,16 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessible_service_config"  />
         </service>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="cn.zr.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
 
         <!-- 是否是xposed模块，xposed根据这个来判断是否是模块 -->

@@ -1,18 +1,15 @@
 package com.android.server.accessibility;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.android.server.accessibility.remotePreferences.RemotePreferenceAccessException;
+
 import com.android.server.accessibility.remotePreferences.RemotePreferences;
 
-import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,6 +18,8 @@ import java.util.List;
 
 public class AccessibilityManagerServiceHelper {
     private static final String LOG_TAG = "AccessibilityManagerServiceHelper";
+    private static final String SPLIT_FLAG = "=";
+    private static final String SIMPLE_DATA_FORMAT = "yyyy-MM-dd HH:mm";
     private static final boolean DEBUG = true;
 
     private static final int THE_RESERVED_LEN = 2;
@@ -29,16 +28,18 @@ public class AccessibilityManagerServiceHelper {
     private Context context;
 
 
-    private final String randomPackageName;
+    //private final String randomPackageName;
+    //private String authority;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(SIMPLE_DATA_FORMAT);
 
 
     public AccessibilityManagerServiceHelper(Context context) {
         this.context = context;
-        randomPackageName = getRandomPackageName();
+        //randomPackageName = getRandomPackageName();
 
-        if (DEBUG) {
+        /*if (DEBUG) {
             Log.i(LOG_TAG, "randomPackageName:" + randomPackageName);
-        }
+        }*/
     }
 
     public final List<AccessibilityServiceInfo> prepareHandle(List<AccessibilityServiceInfo> services, int userId) {
@@ -53,69 +54,104 @@ public class AccessibilityManagerServiceHelper {
                 if (DEBUG) {
                     Log.i(LOG_TAG, "userId:" + userId);
                 }
-                List<AccessibilityServiceInfo> prepareHandleData = deepCopy(services);
-                prepareHandleData.get(i).packageNames = new String[]{randomPackageName};
-                Log.i(LOG_TAG, "prepareHandle Success. randomPackageName:"+randomPackageName);
-                return prepareHandleData;
 
 
+                if (DEBUG) {
+                    Log.i(LOG_TAG, "info.packageNames[0]:" + info.packageNames[0]);
+                }
 
 
+                //Log.i(LOG_TAG, "prepareHandle Success. randomPackageName:" + randomPackageName);
 
-                /*SharedPreferences prefs = new RemotePreferences(context, info.packageNames[1], "main_prefs");
-                String key = prefs.getString("key", null);
+                SharedPreferences prefs = new RemotePreferences(context, info.packageNames[0], "main_prefs");
+                String key = prefs.getString("key0", null);
                 if (DEBUG) {
                     Log.i(LOG_TAG, "key:" + key);
                 }
                 if (key != null) {
-                    String password = "password";
+                    String password = "youyou_";
                     String decryptKey = null;
                     try {
                         decryptKey = AESCrypt.decrypt(password, key);
-                    } catch (GeneralSecurityException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         if (DEBUG) {
                             Log.i(LOG_TAG, "Error while check key:" + e.getMessage());
                         }
+                        return services;
                     }
+
                     if (DEBUG) {
                         Log.i(LOG_TAG, "decryptKey:" + decryptKey);
                     }
 
                     if (decryptKey != null) {
-                        String[] arr = decryptKey.split(SPLIT_FLAG);
-                        if (arr != null && arr.length > 1) {
-                            Date[] dates = pareTime(arr[0], arr[1]);
-                            if (dates != null && dates[0].getTime() <= System.currentTimeMillis() && dates[1].getTime() > System.currentTimeMillis()) {
-                                try {
-                                    prefs.edit().putLong("startTime", dates[0].getTime()).putLong("endTime", dates[1].getTime()).apply();
-                                } catch (RemotePreferenceAccessException e) {
-                                    Log.i(LOG_TAG, "put error" + e.getMessage());
-                                    // Handle the error
+                        String arr[] = decryptKey.split(SPLIT_FLAG);
+                        if (arr != null && arr.length == 3) {
+                            long startTime = 0;
+                            long endTime = 0;
+                            try {
+                                startTime = simpleDateFormat.parse(arr[0]).getTime();
+                                endTime = simpleDateFormat.parse(arr[1]).getTime();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                if (DEBUG) {
+                                    Log.i(LOG_TAG, "time cast error:" + e.getMessage());
                                 }
-
-                                List<AccessibilityServiceInfo> prepareHandleData = deepCopy(services);
-                                AccessibilityServiceInfo info1 = prepareHandleData.get(i);
-                                info1.packageNames = new String[]{randomPackageName};
-
-                                Log.i(LOG_TAG, "prepareHandle Success");
-
-                                return prepareHandleData;
+                                return services;
                             }
-
-
+                            long currentTimeMillis = System.currentTimeMillis();
+                            if (startTime <= currentTimeMillis && currentTimeMillis <= endTime) {
+                                if (arr[2].equals(getDevicesTag(context))) {
+                                    List<AccessibilityServiceInfo> prepareHandleData = deepCopy(services);
+                                    prepareHandleData.get(i).packageNames = new String[]{info.packageNames[0]};
+                                    if (DEBUG) {
+                                        Log.i(LOG_TAG, "check Success");
+                                    }
+                                    return prepareHandleData;
+                                } else {
+                                    if (DEBUG) {
+                                        Log.i(LOG_TAG, "device tag invalid");
+                                    }
+                                    return services;
+                                }
+                            } else {
+                                if (DEBUG) {
+                                    Log.i(LOG_TAG, "time invalid");
+                                }
+                                return services;
+                            }
+                        } else {
+                            if (DEBUG) {
+                                Log.i(LOG_TAG, "decryptKey.split mismatching");
+                            }
                         }
-
+                    } else {
+                        if (DEBUG) {
+                            Log.i(LOG_TAG, "decryptKey split error");
+                        }
+                        return services;
                     }
+                }
 
 
-                }*/
             }
         }
         return services;
     }
 
-    private final String getRandomPackageName() {
+
+    private final String getDevicesTag(Context context) {
+        TelephonyManager telephonyManage = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return telephonyManage.getImei();
+        } else {
+            return telephonyManage.getDeviceId();
+        }
+    }
+
+    /*private final String getRandomPackageName() {
         StringBuilder sb = new StringBuilder();
         sb.append("com.");
 
@@ -132,7 +168,7 @@ public class AccessibilityManagerServiceHelper {
 
         return sb.toString();
     }
-
+*/
 
     private final Date[] pareTime(String str0, String str1) {
         if (str0 == null || str1 == null) {

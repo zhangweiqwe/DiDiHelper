@@ -5,7 +5,7 @@ import java.util.Set;
 
 /**
  * Common utilities used to serialize and deserialize
- * preferences between the preference provider and caller.
+ * preferences_didi between the preference provider and caller.
  */
 /* package */ class RemoteUtils {
     /**

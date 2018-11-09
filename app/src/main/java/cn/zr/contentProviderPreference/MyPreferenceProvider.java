@@ -5,7 +5,7 @@ public class MyPreferenceProvider extends RemotePreferenceProvider {
     public MyPreferenceProvider() {
 
         super("cn.zr.preferences", new String[]{"main_prefs"});
-        /*super("cn.zr.preferences", new RemotePreferenceFile[] {
+        /*super("cn.zr.preferences_didi", new RemotePreferenceFile[] {
                 new RemotePreferenceFile("main_prefs", true)
         });*/
     }

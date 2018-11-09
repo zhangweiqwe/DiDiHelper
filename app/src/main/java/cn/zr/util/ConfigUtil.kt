@@ -1,14 +1,12 @@
-package cn.zr
+package cn.zr.util
 
-import android.content.Context
-import android.content.SharedPreferences
-import android.support.v7.preference.PreferenceManager
 import cn.zr.config.TimeQuantum
 import java.lang.Exception
 import java.text.SimpleDateFormat
 
 class ConfigUtil {
     companion object {
+        private const val LOG_TAG = "ConfigUtil"
 
         const val SPLIT_FLAG = "="
         const val SPLIT_FLAG_BLANK_SPACE = " "
@@ -53,7 +51,7 @@ class ConfigUtil {
                         return TimeQuantum(startTime, endTime)
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        LogManager.log(e.message)
+                        LLog.d(LOG_TAG,e.message)
                     }
                 }
             }

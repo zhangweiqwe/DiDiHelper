@@ -1,17 +1,15 @@
-package cn.zr
+package cn.zr.util
 
 import android.content.Context
 import android.os.Handler
-import android.os.HandlerThread
 import android.os.Message
-import android.util.Log
 import android.widget.Toast
+import cn.zr.R
 import cn.zr.contentProviderPreference.RemotePreferences
 import java.io.IOException
 import java.lang.Exception
 import java.net.URL
 import java.security.GeneralSecurityException
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,24 +26,24 @@ class CheckUtil(val context: Context, onCheckTimeResultListener: OnCheckTimeResu
 
         when (it.what) {
             1000 -> {
-                Toast.makeText(context, context.getString(R.string.validation_failed_please_try_again_after_you_open_the_network), Toast.LENGTH_LONG).show()
+                Toast.makeText(context, context.getString(R.string.validation_failed_please_try_again_after_you_open_the_network), Toast.LENGTH_SHORT).show()
                 onCheckTimeResultListener.onResult(false)
             }
             1001 -> {
-                Toast.makeText(context, context.getString(R.string.valid_time) + "\t" + it.obj as String?, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, context.getString(R.string.valid_time) + "\t" + it.obj as String?, Toast.LENGTH_SHORT).show()
                 onCheckTimeResultListener.onResult(false)
             }
             1002 -> {
-                Toast.makeText(context, context.getString(R.string.authentication_is_successful), Toast.LENGTH_LONG).show()
+                Toast.makeText(context, context.getString(R.string.authentication_is_successful), Toast.LENGTH_SHORT).show()
                 onCheckTimeResultListener.onResult(true)
             }
             1003 -> {
-                Toast.makeText(context, context.getString(R.string.please_enter_the_registration_code), Toast.LENGTH_LONG).show()
+                Toast.makeText(context, context.getString(R.string.please_enter_the_registration_code), Toast.LENGTH_SHORT).show()
                 onCheckTimeResultListener.onResult(false)
             }
             1004 -> {
                 //(context.applicationContext as BaseApplication).exit()
-                Toast.makeText(context, context.getString(R.string.authentication_is_failure), Toast.LENGTH_LONG).show()
+                Toast.makeText(context, context.getString(R.string.authentication_is_failure), Toast.LENGTH_SHORT).show()
             }
         }
         true
@@ -68,13 +66,15 @@ class CheckUtil(val context: Context, onCheckTimeResultListener: OnCheckTimeResu
         if (key != null) {
             var decryptKey: String? = null
             try {
-                decryptKey = AESCrypt.decrypt("password", key)
-            } catch (e: GeneralSecurityException) {
+                decryptKey = AESCrypt.decrypt("_kankan", key)
+            } catch (e: Exception) {
                 e.printStackTrace()
+                LLog.d(LOG_TAG,e.message)
             }
             if (decryptKey != null) {
                 val arr = decryptKey.split(SPLIT_FLAG)
-                if (arr != null && arr.size > 1) {
+                if (arr != null && arr.size > 2 && arr[2] == Util.getDevicesTag(context)) {
+
                     var startDate: Date? = null
                     var endDate: Date? = null
                     try {
@@ -90,7 +90,7 @@ class CheckUtil(val context: Context, onCheckTimeResultListener: OnCheckTimeResu
                             try {
                                 httpsURLConnection.connect()
                                 httpsURLConnection.date.also {
-                                    if (startDate.time < it && it < endDate.time) {
+                                    if (startDate.time <= it && it <= endDate.time) {
                                         handler.sendEmptyMessage(1002)
                                     } else {
                                         handler.sendMessage(Message.obtain().apply {

@@ -27,6 +27,7 @@
             android:key="i_distance_users_sate_key"></ListPreference>
 
         <EditTextPreference
+            android:inputType="numberDecimal"
             android:key="users_distance_destination_key"
             android:title="@string/user_distance_destination" />
         <ListPreference
@@ -64,17 +65,24 @@
     </PreferenceCategory>
 
 
-   <!-- <PreferenceCategory android:title="@string/senior">
+    <PreferenceCategory android:title="@string/senior">
 
-        <EditTextPreference
-            android:key="farthest_drive_key"
-            android:title="@string/farthest_drive" />
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/farthest_drive_entries"
-            android:entryValues="@array/farthest_drive_entryValues"
-            android:key="farthest_drive_sate_key"></ListPreference>
-    </PreferenceCategory>-->
+        <!--  <EditTextPreference
+              android:key="farthest_drive_key"
+              android:title="@string/farthest_drive" />
+          <ListPreference
+              android:defaultValue="0"
+              android:entries="@array/farthest_drive_entries"
+              android:entryValues="@array/farthest_drive_entryValues"
+              android:key="farthest_drive_sate_key"></ListPreference>-->
+
+        <SeekBarPreference
+            android:max="70"
+            android:defaultValue="20"
+            android:key="click_random_delay_key"
+            android:persistent="true"
+            android:summary="@string/click_random_delay" />
+    </PreferenceCategory>
 
 
     <PreferenceCategory android:title="@string/other">

@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import cn.zr.activity.MainActivity;
+import cn.zr.util.DensityUtils;
 
 /**
  * Created by zhongxiang.huang on 2017/6/23.
@@ -49,7 +50,7 @@ public class SuspensionWindow implements View.OnTouchListener {
     private int width, height;
 
 
-   /* private static final Handler handler = new Handler(Looper.getMainLooper()) {
+    private static final Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -57,16 +58,16 @@ public class SuspensionWindow implements View.OnTouchListener {
                 INSTANCE.textView.setText((CharSequence) msg.obj);
             }
         }
-    };*/
+    };
 
-   /* public static void showMsg(CharSequence charSequence) {
+    public static void showMsg(CharSequence charSequence) {
         if (charSequence == null || INSTANCE == null) {
             return;
         }
         Message msg = Message.obtain();
         msg.obj = charSequence;
         handler.sendMessage(msg);
-    }*/
+    }
 
     private TextView textView;
 
@@ -76,8 +77,10 @@ public class SuspensionWindow implements View.OnTouchListener {
         Log.d(TAG, "SuspensionWindow(Context context)");
 
         textView = new TextView(context);
-        textView.setBackgroundColor(0x66000000);
+        textView.setBackgroundColor(0xaa000000);
         textView.setTextColor(0xffffffff);
+        textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+        textView.setText(context.getString(R.string.app_name));
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,7 +116,7 @@ public class SuspensionWindow implements View.OnTouchListener {
     }
 
 
-    private float rawX, rawY, x, y;
+    private float rawX0, rawY0, rawX, rawY, x, y;
 
 
     private boolean move = false;
@@ -124,8 +127,8 @@ public class SuspensionWindow implements View.OnTouchListener {
             case MotionEvent.ACTION_DOWN:
                 x = motionEvent.getX();
                 y = motionEvent.getY();
-                rawX = motionEvent.getRawX();
-                rawY = motionEvent.getRawY();
+                rawX0 = motionEvent.getRawX();
+                rawY0 = motionEvent.getRawY();
                 move = false;
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -134,7 +137,11 @@ public class SuspensionWindow implements View.OnTouchListener {
                 layoutParams.x = (int) (rawX - x);
                 layoutParams.y = (int) (rawY - y);
                 windowManager.updateViewLayout(view, layoutParams);
-                move = true;
+                if (Math.abs(rawX0 - rawX) > 10 || Math.abs(rawY0 - rawY) > 10) {
+                    move = true;
+                } else {
+                    move = false;
+                }
                 break;
             case MotionEvent.ACTION_UP:
                 break;

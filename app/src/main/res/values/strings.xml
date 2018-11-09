@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">zr</string>
+    <string name="app_name">丢丢助手</string>
     <string name="description">已启动</string>
     <string name="no_suspension_windows_permission">没有悬浮窗权限</string>
 
@@ -25,8 +25,10 @@
     <string name="format_error">格式错误</string>
 
     <string name="confirm">确定</string>
+    <string name="copy_device_id">复制手机ID</string>
     <string name="cancel">取消</string>
     <string name="save_success">保存成功</string>
+    <string name="copy_success">复制成功</string>
     <string name="the_start_time_cannot_be_greater_than_the_end_time">开始时间不能大于结束时间</string>
     <string name="please_open_the_network_and_try_again">请打开网络后重试</string>
 
@@ -41,6 +43,19 @@
     <string name="authentication_is_failure">验证失败</string>
     <string name="please_enter_the_registration_code">请输入注册码</string>
     <string name="registration_code">注册码</string>
+
+    <string name="share">分享</string>
+    <string name="send_log">发送日志</string>
+    <string name="poll_code">注册码</string>
+    <string name="click_random_delay">点击随机延迟</string>
+    <string name="please_grant_root_authority">请授予root权限</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 
     <array name="i_distance_users_entries">
         <item>匹配</item>
@@ -93,12 +108,12 @@
     </string-array>
 
 
-   <!-- <array name="farthest_drive_entries">
-        <item>匹配</item>
-        <item>关闭</item>
-    </array>
-    <string-array name="farthest_drive_entryValues">
-        <item>1</item>
-        <item>0</item>
-    </string-array>-->
+    <!-- <array name="farthest_drive_entries">
+         <item>匹配</item>
+         <item>关闭</item>
+     </array>
+     <string-array name="farthest_drive_entryValues">
+         <item>1</item>
+         <item>0</item>
+     </string-array>-->
 </resources>

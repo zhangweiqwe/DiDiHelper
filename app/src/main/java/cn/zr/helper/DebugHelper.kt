@@ -1,16 +1,10 @@
-package cn.zr
+package cn.zr.helper
 
-import android.app.Activity
 import android.content.Context
-import android.os.Process
 import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
-import java.io.OutputStream
-import android.content.pm.PackageManager
-import android.app.ActivityManager
-import android.content.Context.ACTIVITY_SERVICE
-import android.support.v4.content.ContextCompat.getSystemService
+import cn.zr.util.ShellUtil
 
 
 class DebugHelper {

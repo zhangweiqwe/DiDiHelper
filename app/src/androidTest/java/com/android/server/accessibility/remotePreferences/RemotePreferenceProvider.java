@@ -118,7 +118,7 @@ public abstract class RemotePreferenceProvider extends ContentProvider implement
         private final String mPrefFileName;
         /**
          * Context of the preference file.
-         * Use true if these preferences need to be exposed before the first unlock
+         * Use true if these preferences_didi need to be exposed before the first unlock
          * Or false, which is the default, if they are stored encrypted on the device.
          */
         private final boolean mIsDeviceProtected;
@@ -176,7 +176,7 @@ public abstract class RemotePreferenceProvider extends ContentProvider implement
     /**
      * Checks whether the specified preference is accessible by callers.
      * The default implementation returns {@code true} for all accesses.
-     * You may override this method to control which preferences can be
+     * You may override this method to control which preferences_didi can be
      * read or written. Note that {@code prefKey} will be {@code ""} when
      * accessing an entire file, so a whitelist is strongly recommended
      * over a blacklist (your default case should be {@code return false},
@@ -312,7 +312,7 @@ public abstract class RemotePreferenceProvider extends ContentProvider implement
      *
      * @param uri Specifies the preference file to write to.
      * @param values See {@link #insert(Uri, ContentValues)}.
-     * @return The number of preferences written, or 0 on failure.
+     * @return The number of preferences_didi written, or 0 on failure.
      */
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
@@ -342,12 +342,12 @@ public abstract class RemotePreferenceProvider extends ContentProvider implement
      * Deletes the specified preference(s). If {@code uri} is in the form
      * {@code content://authority/prefName/prefKey}, this will only delete
      * the one preference specified in the URI; if {@code uri} is in the form
-     * {@code content://authority/prefName}, clears all preferences.
+     * {@code content://authority/prefName}, clears all preferences_didi.
      *
      * @param uri Specifies the preference file and key (optional) to delete.
      * @param selection Ignored.
      * @param selectionArgs Ignored.
-     * @return 1 if the preferences committed successfully, or 0 on failure.
+     * @return 1 if the preferences_didi committed successfully, or 0 on failure.
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -384,7 +384,7 @@ public abstract class RemotePreferenceProvider extends ContentProvider implement
      * @param values {@code null} to delete the preference,
      * @param selection Ignored.
      * @param selectionArgs Ignored.
-     * @return 1 if the preferences committed successfully, or 0 on failure.
+     * @return 1 if the preferences_didi committed successfully, or 0 on failure.
      */
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
@@ -480,7 +480,7 @@ public abstract class RemotePreferenceProvider extends ContentProvider implement
         Object value = RemoteUtils.deserializeInput(rawValue, type);
 
         // If we are writing to the "directory" and the type is null,
-        // then we should clear the preferences.
+        // then we should clear the preferences_didi.
         if (!isSingleKey(prefKey)) {
             if (type == RemoteContract.TYPE_NULL) {
                 editor.clear();
@@ -501,7 +501,7 @@ public abstract class RemotePreferenceProvider extends ContentProvider implement
             if (Build.VERSION.SDK_INT >= 11) {
                 editor.putStringSet(prefKey, RemoteUtils.castStringSet(value));
             } else {
-                throw new IllegalArgumentException("String set preferences not supported on API < 11");
+                throw new IllegalArgumentException("String set preferences_didi not supported on API < 11");
             }
             break;
         case RemoteContract.TYPE_INT:

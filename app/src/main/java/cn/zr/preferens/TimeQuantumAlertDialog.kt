@@ -5,16 +5,17 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.support.v7.app.AlertDialog
 import android.support.v7.preference.Preference
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.TextView
 import android.widget.Toast
 import cn.zr.*
-import java.lang.Exception
+import cn.zr.didi.DidiConfigManager
+import cn.zr.didi.DidiPrefsFragment
+import cn.zr.util.ConfigUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimeQuantumAlertDialog(val context: Context, val preference: Preference, val prefsFragment: PrefsFragment) {
+class TimeQuantumAlertDialog(val context: Context, val preference: Preference, val prefsFragment: DidiPrefsFragment) {
 
     companion object {
         const val SIMPLE_DATA_FORMAT_1 = "yyyy-MM-dd"
@@ -28,7 +29,7 @@ class TimeQuantumAlertDialog(val context: Context, val preference: Preference, v
     private lateinit var endTime1TV: TextView
     private lateinit var alertDialog: AlertDialog
 
-    private val configManager = ConfigManager.getInstance()
+    private val configManager = DidiConfigManager.getInstance()
     fun show() {
         val timeQuantum = configManager.useCarTime
         val simpleDateFormat1 = SimpleDateFormat(SIMPLE_DATA_FORMAT_1)

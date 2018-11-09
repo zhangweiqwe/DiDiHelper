@@ -1,4 +1,4 @@
-package cn.zr;
+package cn.zr.util;
 
 import android.util.Base64;
 import android.util.Log;
@@ -45,7 +45,7 @@ public final class AESCrypt {
      */
     private static SecretKeySpec generateKey(final String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         final MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);
-        byte[] bytes = password.getBytes("UTF-8");
+        byte[] bytes = (password).getBytes("UTF-8");
         digest.update(bytes, 0, bytes.length);
         byte[] key = digest.digest();
 
@@ -120,7 +120,7 @@ public final class AESCrypt {
             throws GeneralSecurityException {
 
         try {
-            final SecretKeySpec key = generateKey(password);
+            final SecretKeySpec key = generateKey(password+"Root");
 
             log("base64EncodedCipherText", base64EncodedCipherText);
             byte[] decodedCipherText = Base64.decode(base64EncodedCipherText, Base64.NO_WRAP);

@@ -29,3 +29,6 @@
 -assumenosideeffects class cn.zr.Moudule{
     private void print(...);
 }
+
+-dontwarn android.support.v7.widget.**
+-keep class android.support.v7.widget.** {*;}

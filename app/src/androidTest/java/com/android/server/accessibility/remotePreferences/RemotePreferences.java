@@ -25,7 +25,7 @@ import java.util.WeakHashMap;
  * </p>
  *
  * <p>
- * If you are reading preferences from the same context as the
+ * If you are reading preferences_didi from the same context as the
  * provider, you should not use this class; just access the
  * {@link SharedPreferences} API as you would normally.
  * </p>
@@ -38,7 +38,7 @@ public class RemotePreferences implements SharedPreferences {
     private final boolean mStrictMode;
 
     /**
-     * Initializes a new remote preferences object, with strict
+     * Initializes a new remote preferences_didi object, with strict
      * mode disabled.
      *
      * @param context Used to access the preference provider.
@@ -50,7 +50,7 @@ public class RemotePreferences implements SharedPreferences {
     }
 
     /**
-     * Initializes a new remote preferences object. If {@code strictMode}
+     * Initializes a new remote preferences_didi object. If {@code strictMode}
      * is {@code true} and the remote preference provider cannot be accessed,
      * read/write operations on this object will throw a
      * {@link RemotePreferenceAccessException}. Otherwise, default values
@@ -197,7 +197,7 @@ public class RemotePreferences implements SharedPreferences {
     }
 
     /**
-     * Writes multiple preferences at once to the preference provider.
+     * Writes multiple preferences_didi at once to the preference provider.
      * If the operation fails and strict mode is enabled, an exception
      * will be thrown; otherwise {@code false} will be returned.
      *
@@ -258,11 +258,11 @@ public class RemotePreferences implements SharedPreferences {
     }
 
     /**
-     * Reads all preferences from the preference provider. If strict
-     * mode is disabled and the preferences cannot be read, an empty
+     * Reads all preferences_didi from the preference provider. If strict
+     * mode is disabled and the preferences_didi cannot be read, an empty
      * map is returned.
      *
-     * @return A map containing all preferences.
+     * @return A map containing all preferences_didi.
      */
     private Map<String, Object> queryAll() {
         Uri uri = mBaseUri.buildUpon().appendPath("").build();
@@ -291,7 +291,7 @@ public class RemotePreferences implements SharedPreferences {
 
     /**
      * Checks whether the preference exists. If strict mode is
-     * disabled and the preferences cannot be read, {@code false}
+     * disabled and the preferences_didi cannot be read, {@code false}
      * is returned.
      *
      * @param key The key to check existence for.
